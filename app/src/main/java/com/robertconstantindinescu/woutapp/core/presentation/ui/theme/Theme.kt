@@ -33,7 +33,7 @@ private val DarkColorPalette = darkColorScheme(
     inverseSurface = Grey90,
     inverseOnSurface = Grey10,
     surfaceVariant = GreenGrey30,
-    onSurfaceVariant = GreenGrey80,
+    onSurfaceVariant = GreenGrey60,
     outline = GreenGrey80
 )
 
