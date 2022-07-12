@@ -1,0 +1,192 @@
+package com.robertconstantindinescu.woutapp
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.Password
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.robertconstantindinescu.woutapp.core.presentation.components.StandardTexField
+import com.robertconstantindinescu.woutapp.core.presentation.components.StandartButton
+import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginEvent
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginViewModel
+
+@Composable
+fun LoginScreen(
+    onSignUpClick: () -> Unit = {},
+    onLoginClick: () ->  Unit = {},
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val dimens = LocalSpacing.current
+    val emailState = viewModel.emailState
+    val passwordState = viewModel.passwordState
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = dimens.spaceMedium,
+                    vertical = dimens.spaceLarge
+                ),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimens.spaceExtraLarge)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(id = R.string.login_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+                    Spacer(modifier = Modifier.height(dimens.spaceSmall))
+                    Text(
+                        text = stringResource(id = R.string.login_subtitle),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = dimens.spaceExtraLarge
+                    )
+            ) {
+                StandardTexField(
+                    modifier = Modifier.padding(
+                        vertical = dimens.spaceSmall
+                    ),
+                    text = emailState.text,
+                    hint = stringResource(id = R.string.user_email),
+                    error = "",
+                    keyboardType = KeyboardType.Email,
+                    leadingIcon = Icons.Default.Email,
+                    onValueChange = {
+                        viewModel.onEvent(LoginEvent.OnEnterEmail(it))
+                    }
+                )
+                StandardTexField(
+                    modifier = Modifier.padding(
+                        vertical = dimens.spaceSmall
+                    ),
+                    text = passwordState.authStandardFieldState.text,
+                    hint = stringResource(id = R.string.user_password),
+                    error = "",
+                    keyboardType = KeyboardType.Password,
+                    showPasswordToggle = true,
+                    leadingIcon = Icons.Default.Password,
+                    onPasswordToggleClick = {
+
+                    },
+                    onValueChange = {
+                        viewModel.onEvent(LoginEvent.OnEnterPassword(it))
+                    }
+                )
+            }
+
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimens.spaceExtraLarge),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login_button_text),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimens.spaceSmall)
+            )
+
+            Divider(
+                modifier = Modifier
+                    .width(80.dp)
+                    .align(CenterHorizontally)
+                    .padding(vertical = dimens.spaceMedium),
+                color = MaterialTheme.colorScheme.primary,
+                thickness = 1.dp, )
+
+            Text(
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .clickable {
+                        onSignUpClick()
+                    },
+                text = buildAnnotatedString {
+                    append(stringResource(id = R.string.dont_have_an_account_yet))
+                    append(" ")
+                    val signUpText = stringResource(id = R.string.sign_up_button_text)
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        append(signUpText)
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+        }
+
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
