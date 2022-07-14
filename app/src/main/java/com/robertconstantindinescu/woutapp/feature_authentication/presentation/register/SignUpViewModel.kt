@@ -53,10 +53,14 @@ class SignUpViewModel @Inject constructor(
                 )
             }
             is SignUpEvent.OnEnterPassword -> {
-                passwordState = AuthPasswordState(AuthStandardFieldState(text = event.password))
+                passwordState = passwordState.copy(
+                   authStandardFieldState =  AuthStandardFieldState(text = event.password)
+                )
             }
             is SignUpEvent.OnPasswordToggleClick -> {
-
+                passwordState = passwordState.copy(
+                    isPasswordHide = !passwordState.isPasswordHide
+                )
             }
             is SignUpEvent.OnRegisterClick -> {
                 signUpUser()
@@ -76,7 +80,6 @@ class SignUpViewModel @Inject constructor(
                 passwordState.copy(authStandardFieldState = AuthStandardFieldState(
                     text = passwordState.authStandardFieldState.text,
                     error = null))
-
 
             val signUpResult = userCases.signUpUseCase(
                 usernameState.text,
@@ -104,20 +107,23 @@ class SignUpViewModel @Inject constructor(
                         isLoading = false,
                         isSignUpSuccessful = true
                     )
-                    // TODO: Emit event to show snackbar
+
+                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.sign_up_user_register_success)))
+                    _uiEvent.send(UiEvent.NavigateUp(Params(email = emailState.text)))
+
                     //Clear all errors by generating a new instance of field states
                     usernameState = AuthStandardFieldState()
                     emailState = AuthStandardFieldState()
                     passwordState = AuthPasswordState(AuthStandardFieldState())
 
-                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.sign_up_user_register_success)))
-                    _uiEvent.send(UiEvent.NavigateUp(Params(email = emailState.text)))
+
                 }
                 is ApiResource.Error -> {
                     registerState = registerState.copy(
                         isLoading = false,
                         isSignUpSuccessful = false,
-                        message = signUpResult.result.text
+                        message = signUpResult.result.text?.let { message ->
+                            UiText.DynamicString(message) }
                     )
                 }
                 //If happen field error, result is null

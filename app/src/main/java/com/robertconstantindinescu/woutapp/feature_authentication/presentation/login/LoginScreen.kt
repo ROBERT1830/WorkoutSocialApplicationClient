@@ -1,22 +1,18 @@
 package com.robertconstantindinescu.woutapp
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.*
+import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -25,7 +21,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.robertconstantindinescu.woutapp.core.presentation.components.StandardTexField
-import com.robertconstantindinescu.woutapp.core.presentation.components.StandartButton
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginEvent
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginViewModel
@@ -33,7 +28,7 @@ import com.robertconstantindinescu.woutapp.feature_authentication.presentation.l
 @Composable
 fun LoginScreen(
     onSignUpClick: () -> Unit = {},
-    onLoginClick: () ->  Unit = {},
+    onLoginClick: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val dimens = LocalSpacing.current
@@ -102,14 +97,15 @@ fun LoginScreen(
                     hint = stringResource(id = R.string.user_password),
                     error = "",
                     keyboardType = KeyboardType.Password,
-                    showPasswordToggle = true,
+                    isPasswordHide = passwordState.isPasswordHide,
                     leadingIcon = Icons.Default.Password,
                     onPasswordToggleClick = {
-
+                        viewModel.onEvent(LoginEvent.OnPasswordToggleClick)
                     },
                     onValueChange = {
                         viewModel.onEvent(LoginEvent.OnEnterPassword(it))
                     }
+
                 )
             }
 
@@ -138,14 +134,19 @@ fun LoginScreen(
                     .align(CenterHorizontally)
                     .padding(vertical = dimens.spaceMedium),
                 color = MaterialTheme.colorScheme.primary,
-                thickness = 1.dp, )
+                thickness = 1.dp,
+            )
 
             Text(
                 modifier = Modifier
                     .align(CenterHorizontally)
-                    .clickable {
-                        onSignUpClick()
-                    },
+                    .clickable(
+                        onClick = {
+                            onSignUpClick()
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
                 text = buildAnnotatedString {
                     append(stringResource(id = R.string.dont_have_an_account_yet))
                     append(" ")

@@ -46,8 +46,8 @@ fun StandardTexField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     onValueChange: (String) -> Unit = {},
-    showPasswordToggle: Boolean = false,
-    onPasswordToggleClick: (Boolean) -> Unit = {}
+    isPasswordHide: Boolean = true,
+    onPasswordToggleClick: () -> Unit = {}
 ) {
 
     Column(
@@ -72,7 +72,8 @@ fun StandardTexField(
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = backgroundColor,
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
                 ),
                 placeholder = {
                     Text(text = hint, style = MaterialTheme.typography.bodyMedium)
@@ -81,7 +82,7 @@ fun StandardTexField(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = keyboardType
                 ),
-                visualTransformation = if (showPasswordToggle && isPasswordToggleDisplayed) {
+                visualTransformation = if (isPasswordHide && isPasswordToggleDisplayed) {
                     PasswordVisualTransformation()
                 } else {
                     VisualTransformation.None
@@ -99,14 +100,14 @@ fun StandardTexField(
                 } else null,
                 trailingIcon = if (isPasswordToggleDisplayed) {
                     {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { onPasswordToggleClick() }) {
                             Icon(
-                                imageVector = if (showPasswordToggle) {
+                                imageVector = if (isPasswordHide) {
                                     Icons.Filled.VisibilityOff
                                 } else {
                                     Icons.Filled.Visibility
 
-                                }, contentDescription = if (showPasswordToggle) {
+                                }, contentDescription = if (isPasswordHide) {
                                     stringResource(R.string.password_visible_content_description)
                                 } else {
                                     stringResource(R.string.password_hidden_content_description)
@@ -118,15 +119,16 @@ fun StandardTexField(
                 } else null,
 
                 )
-            if (error.isNotEmpty()) {
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End
-                )
-            }
+
+        }
+        if (error.isNotEmpty()) {
+            Text(
+                text = error,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End
+            )
         }
 
     }

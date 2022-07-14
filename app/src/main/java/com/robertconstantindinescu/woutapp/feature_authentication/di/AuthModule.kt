@@ -5,6 +5,7 @@ import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dt
 import com.robertconstantindinescu.woutapp.feature_authentication.data.repository.AuthRepositoryImpl
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
+import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.LoginUseCase
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.SignUpUseCase
 import dagger.Module
 import dagger.Provides
@@ -39,7 +40,9 @@ object AuthModule {
     @Singleton
     fun provideSignUpUseCase(repository: AuthRepository): AuthUseCases {
         return AuthUseCases(
-            signUpUseCase = SignUpUseCase(repository)
+            signUpUseCase = SignUpUseCase(repository),
+            signInUseCase = LoginUseCase(repository)
         )
     }
+
 }

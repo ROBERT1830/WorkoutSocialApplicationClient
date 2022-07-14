@@ -13,12 +13,12 @@ inline fun <T> callApi(call: () -> Response<T>): ApiResource<T> {
         val response = call.invoke()
         when {
             response.isSuccessful && response.body() != null -> ApiResource.Success(data = response.body())
-            else -> ApiResource.Error(UiText.DynamicString(response.message()))
+            else -> ApiResource.Error(response.message())
         }
     }catch (exception: IOException) {
-        ApiResource.Error(UiText.DynamicString(exception.message ?: ""))
+        ApiResource.Error(exception.message)
     }catch (exception: HttpException) {
-        ApiResource.Error(UiText.DynamicString(exception.message ?: ""))
+        ApiResource.Error(exception.message)
 
     }
 }

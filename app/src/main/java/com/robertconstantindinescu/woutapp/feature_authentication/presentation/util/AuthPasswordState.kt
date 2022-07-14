@@ -2,5 +2,5 @@ package com.robertconstantindinescu.woutapp.feature_authentication.presentation.
 
 data class AuthPasswordState(
     val authStandardFieldState: AuthStandardFieldState,
-    val isPasswordShown: Boolean = false
+    val isPasswordHide: Boolean = true
 )

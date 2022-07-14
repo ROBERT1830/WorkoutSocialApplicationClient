@@ -77,11 +77,10 @@ class MainActivity : ComponentActivity() {
                                     scaffoldState = scaffoldState,
                                     onLoginNavigation = { email ->
                                         email?.let {
-                                            navController.navigate(Screen.LoginScreen.route + "/$email")
+                                            navController.navigate(Screen.LoginScreen.route + "?email=$email")
                                         } ?: kotlin.run {
                                             navController.navigateUp()
                                         }
-
                                     },
                                     onShowSnackBar = { uiText ->
                                         lifecycleScope.launchWhenStarted {
