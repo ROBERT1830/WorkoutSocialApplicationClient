@@ -16,4 +16,6 @@ interface AuthRepository {
         email: String,
         password: String
     ): ApiResource<AuthModel>
+
+    suspend fun authenticate(): DefaultApiResource
 }

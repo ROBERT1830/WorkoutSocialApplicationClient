@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val useCases: AuthUseCases
 ) : ViewModel() {
 
@@ -62,11 +62,8 @@ class LoginViewModel @Inject constructor(
                     isPasswordHide = !passwordState.isPasswordHide
                 )
             }
-            is LoginEvent.onLoginClick -> {
+            is LoginEvent.OnLoginClick -> {
                 loginUser()
-            }
-            is LoginEvent.onSignUpClick -> {
-
             }
         }
 
@@ -75,7 +72,6 @@ class LoginViewModel @Inject constructor(
     private fun loginUser() {
         viewModelScope.launch {
             loginState = loginState.copy(
-                isLoginSuccessful = false,
                 isLoading = true
             )
 
@@ -103,21 +99,22 @@ class LoginViewModel @Inject constructor(
             when(loginResult.result) {
                 is ApiResource.Success -> {
                     loginState = loginState.copy(
-                        isLoginSuccessful = true,
                         isLoading = false
                     )
                     emailState = AuthStandardFieldState()
                     passwordState = AuthPasswordState(authStandardFieldState = AuthStandardFieldState())
                     // TODO: emit message of succesflully login
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
-                    _uiEvent.send(UiEvent.NavigateTo()) //review to nos leave likea  class...is think
+                    _uiEvent.send(UiEvent.NavigateTo())
                 }
                 is ApiResource.Error -> {
                     loginState = loginState.copy(
-                        isLoginSuccessful = false,
                         isLoading = false
                     )
-
+                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
+                    _uiEvent.send(
+                        UiEvent.ShowSnackBar(UiText.DynamicString(loginResult.result.text) )
+                    )
 
 
                 }

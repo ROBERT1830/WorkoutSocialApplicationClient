@@ -4,6 +4,5 @@ import com.robertconstantindinescu.woutapp.core.util.UiText
 
 data class LoginState(
     val message: UiText? = null,
-    val isLoginSuccessful: Boolean? = false,
-    val isLoading: Boolean? = false
+    val isLoading: Boolean = false
 )

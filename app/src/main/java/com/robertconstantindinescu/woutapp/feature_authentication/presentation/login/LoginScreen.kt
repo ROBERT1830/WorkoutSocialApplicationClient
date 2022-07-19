@@ -8,9 +8,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.*
-import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,18 +23,39 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.robertconstantindinescu.woutapp.core.presentation.components.StandardTexField
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
+import com.robertconstantindinescu.woutapp.core.util.UiEvent
+import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginEvent
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
     onSignUpClick: () -> Unit = {},
-    onLoginClick: () -> Unit = {},
+    onShowSnackBar: (text: UiText) -> Unit = {},
+    onNavigateTo: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val dimens = LocalSpacing.current
     val emailState = viewModel.emailState
     val passwordState = viewModel.passwordState
+    val loginState = viewModel.loginState
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collectLatest { uiEvent ->
+            when(uiEvent) {
+                is UiEvent.ShowSnackBar -> {
+                    onShowSnackBar(uiEvent.text)
+                }
+                is UiEvent.NavigateTo -> {
+                     onNavigateTo()
+                }
+                else -> Unit
+            }
+
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -110,7 +132,7 @@ fun LoginScreen(
             }
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { viewModel.onEvent(LoginEvent.OnLoginClick) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimens.spaceExtraLarge),
@@ -164,7 +186,9 @@ fun LoginScreen(
             )
 
         }
-
+        if (loginState.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Center), color = MaterialTheme.colorScheme.primary)
+        }
 
     }
 }

@@ -6,6 +6,5 @@ sealed class LoginEvent {
     data class OnEnterEmail(val email: String) : LoginEvent()
     data class OnEnterPassword(val password: String) : LoginEvent()
     object OnPasswordToggleClick : LoginEvent()
-    object onLoginClick : LoginEvent()
-    object onSignUpClick : LoginEvent()
+    object OnLoginClick : LoginEvent()
 }
