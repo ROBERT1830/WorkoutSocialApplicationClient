@@ -13,7 +13,6 @@ import com.robertconstantindinescu.woutapp.feature_authentication.data.mapper.to
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
-import com.robertconstantindinescu.woutapp.feature_authentication.domain.model.AuthModel
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(

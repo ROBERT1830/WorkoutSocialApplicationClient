@@ -1,7 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto
 
-import com.robertconstantindinescu.woutapp.core.data.response.BasicApiResponse
-import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.response.AuthResponseDto
