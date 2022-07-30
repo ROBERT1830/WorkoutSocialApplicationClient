@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.ApiResource
+import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
@@ -102,12 +102,10 @@ class SignUpViewModel @Inject constructor(
             }
 
             when(signUpResult.result) {
-                is ApiResource.Success -> {
+                is Resource.Success -> {
                     registerState = registerState.copy(
                         isLoading = false,
-                        isSignUpSuccessful = true
                     )
-
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.sign_up_user_register_success)))
                     _uiEvent.send(UiEvent.NavigateUp(Params(email = emailState.text)))
 
@@ -115,16 +113,12 @@ class SignUpViewModel @Inject constructor(
                     usernameState = AuthStandardFieldState()
                     emailState = AuthStandardFieldState()
                     passwordState = AuthPasswordState(AuthStandardFieldState())
-
-
                 }
-                is ApiResource.Error -> {
+                is Resource.Error -> {
                     registerState = registerState.copy(
-                        isLoading = false,
-                        isSignUpSuccessful = false,
-                        message = signUpResult.result.text?.let { message ->
-                            UiText.DynamicString(message) }
+                        isLoading = false
                     )
+                    _uiEvent.send(UiEvent.ShowSnackBar(signUpResult.result.text ?: UiText.unknownError()))
                 }
                 //If happen field error, result is null
                 null -> registerState = registerState.copy(isLoading = false)

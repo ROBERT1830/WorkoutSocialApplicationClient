@@ -2,7 +2,8 @@ package com.robertconstantindinescu.woutapp.feature_authentication.data.reposito
 
 
 import android.content.SharedPreferences
-import com.robertconstantindinescu.woutapp.core.util.ApiResource
+import com.robertconstantindinescu.woutapp.R
+import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_USER_ID
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
@@ -26,7 +27,7 @@ class AuthRepositoryImpl(
         password: String
     ): DefaultApiResource {
 
-        return callApi {
+        val response = callApi {
             api.signUpUser(
                 SignUpRequestDto(
                     name = name,
@@ -35,9 +36,19 @@ class AuthRepositoryImpl(
                 )
             )
         }
+       return when(response.successful) {
+            true -> {
+                Resource.Success<Unit>()
+            }
+            false -> {
+                response.message?.let {
+                    Resource.Error(UiText.DynamicString(response.message))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
     }
 
-    override suspend fun signInUser(email: String, password: String): ApiResource<AuthModel> {
+    override suspend fun signInUser(email: String, password: String): DefaultApiResource {
 
         val response = callApi {
             api.signInUser(
@@ -47,27 +58,60 @@ class AuthRepositoryImpl(
                 )
             )
         }
-        // TODO: SAVE THE TOKEN IN SHARED PREFERENCES
-        return when(response) {
-            is ApiResource.Success -> {
-                 ApiResource.Success(response.data?.toAuthModel().also {
-                     sharedPreferences.edit()
-                         .putString(KEY_JWT_TOKEN, it?.token)
-                         .putString(KEY_USER_ID, it?.userId)
-                         .apply()
-                 })
+        return when(response.successful) {
+            true -> {
+                response.data?.toAuthModel().also {
+                    sharedPreferences.edit()
+                        .putString(KEY_JWT_TOKEN, it?.token)
+                        .putString(KEY_USER_ID, it?.userId)
+                        .apply()
+                }
+                Resource.Success<Unit>()
             }
-            is ApiResource.Error -> {
-                ApiResource.Error(text = response.text)
+            false -> {
+                response.message?.let { serverMsg ->
+                    Resource.Error(UiText.DynamicString(serverMsg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
             }
+//            is Resource.Success -> {
+//                response.data?.toAuthModel().also {
+//                    sharedPreferences.edit()
+//                        .putString(KEY_JWT_TOKEN, it?.token)
+//                        .putString(KEY_USER_ID, it?.userId)
+//                        .apply()
+////                 Resource.Success(response.data?.toAuthModel().also {
+////                     sharedPreferences.edit()
+////                         .putString(KEY_JWT_TOKEN, it?.token)
+////                         .putString(KEY_USER_ID, it?.userId)
+////                         .apply()
+////                 })
+//                }
+//                Resource.Success<Unit>()
+//            }
+//            is Resource.Error -> {
+//                response.text.apply {
+//
+//                }
+//                Resource.Error(UiText.DynamicString(response.text))            }
         }
     }
 
     override suspend fun authenticate(): DefaultApiResource {
 
-        return callApi {
+        val response = callApi {
             api.authenticate()
         }
+        return when(response.successful) {
+            true -> {
+                Resource.Success<Unit>()
+            }
+            false -> {
+                response.message?.let {
+                    Resource.Error(UiText.DynamicString(response.message))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
+
 
     }
 }

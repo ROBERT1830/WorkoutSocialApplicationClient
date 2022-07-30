@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.robertconstantindinescu.woutapp.LoginScreen
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.BottomNavMenu
@@ -27,12 +28,14 @@ import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.A
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.BottomMenuScreen
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.WoutAppTheme
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.register.SignUpScreen
+import com.robertconstantindinescu.woutapp.feature_create_post.presentation.CreatePostScreen
 import com.robertconstantindinescu.woutapp.feature_main_feed.presentation.MainFeedScreen
 import com.robertconstantindinescu.woutapp.feature_splash.presentation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -162,6 +165,22 @@ class MainActivity : ComponentActivity() {
 
                             composable(route = BottomMenuScreen.FavoritesScreen.route) {
 
+                            }
+
+                            composable(route = BottomMenuScreen.CreatePostScreen.route) {
+                                CreatePostScreen(
+                                    navHostController =  navController,
+                                    onShowSnackBar = { uiText ->
+                                        lifecycleScope.launchWhenStarted {
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = uiText.asString(context = context)
+                                            )
+                                        }
+                                    },
+                                    onNavigateUp = {
+                                        navController.navigateUp()
+                                    }
+                                )
                             }
 
                         }

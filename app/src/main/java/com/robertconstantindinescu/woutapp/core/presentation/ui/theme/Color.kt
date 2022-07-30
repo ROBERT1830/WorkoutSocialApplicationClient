@@ -41,3 +41,11 @@ val GreenGrey50 = Color(0xFF52ad76)
 val GreenGrey60 = Color(0xFF74be92)
 val GreenGrey80 = Color(0xFFbadec8)
 val GreenGrey90 = Color(0xFFdcefe4)
+
+//Item colors
+val BlueViolet = Color(0xff8f98fd)
+val LightGreen = Color(0xff11d79b)
+val Beige = Color(0xfff9a27b)
+val OrangeYellow = Color(0xfff4cf65)
+val AquaBlue = Color(0xff9aa5c4)
+val LightRed = Color(0xfffc879a)
