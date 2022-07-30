@@ -4,7 +4,6 @@ import android.net.Uri
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
-import com.robertconstantindinescu.woutapp.core.util.SimpleResource
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_create_post.domain.repository.PostRepository
 
