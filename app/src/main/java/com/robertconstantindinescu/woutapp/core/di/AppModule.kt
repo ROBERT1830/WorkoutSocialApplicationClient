@@ -3,13 +3,12 @@ package com.robertconstantindinescu.woutapp.core.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
-import com.robertconstantindinescu.woutapp.core.util.UiText
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -44,6 +43,12 @@ object AppModule {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson {
+        return Gson()
     }
 
 }

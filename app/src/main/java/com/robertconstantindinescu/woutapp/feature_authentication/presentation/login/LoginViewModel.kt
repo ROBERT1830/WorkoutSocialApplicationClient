@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.presentation.login
 
-import android.graphics.text.TextRunShaper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.ApiResource
+import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
@@ -97,7 +96,7 @@ class LoginViewModel @Inject constructor(
             }
 
             when(loginResult.result) {
-                is ApiResource.Success -> {
+                is Resource.Success -> {
                     loginState = loginState.copy(
                         isLoading = false
                     )
@@ -107,13 +106,12 @@ class LoginViewModel @Inject constructor(
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
                     _uiEvent.send(UiEvent.NavigateTo())
                 }
-                is ApiResource.Error -> {
+                is Resource.Error -> {
                     loginState = loginState.copy(
                         isLoading = false
                     )
-                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
                     _uiEvent.send(
-                        UiEvent.ShowSnackBar(UiText.DynamicString(loginResult.result.text) )
+                        UiEvent.ShowSnackBar(loginResult.result.text ?: UiText.unknownError())
                     )
 
 

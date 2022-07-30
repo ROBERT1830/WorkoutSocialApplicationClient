@@ -11,7 +11,7 @@ class SignUpUseCase(
         username: String,
         email: String,
         password: String
-    ):SignUpUserValidation {
+    ): SignUpUserValidation {
 
         val usernameError =  ValidationUtil.validateUsername(username)
         val emailError = ValidationUtil.validateEmail(email)

@@ -7,6 +7,7 @@ import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.Va
 
 class LoginUseCase(private val repository: AuthRepository) {
 
+    // TODO: mirar bien bnien el tema del; resource.  
     suspend operator fun invoke(email: String, passsword: String): LoginUserValidation {
 
         if (email.trim().isBlank()) return LoginUserValidation(email = AuthError.FieldEmpty)

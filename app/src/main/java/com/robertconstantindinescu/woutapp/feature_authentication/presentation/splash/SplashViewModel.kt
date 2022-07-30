@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.AuthScreen
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.BottomMenuScreen
-import com.robertconstantindinescu.woutapp.core.util.ApiResource
+import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,10 +33,10 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             when(useCases.initAuthUseCase()) {
-                is ApiResource.Success -> {
+                is Resource.Success -> {
                     _uiEvent.send(UiEvent.NavigateTo(InitNavigationTo.MainFeedScreen))
                 }
-                is ApiResource.Error -> {
+                is Resource.Error -> {
                     _uiEvent.send(UiEvent.NavigateTo(InitNavigationTo.LoginScreen))
                 }
             }
