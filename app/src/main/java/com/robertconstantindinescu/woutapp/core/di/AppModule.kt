@@ -3,6 +3,9 @@ package com.robertconstantindinescu.woutapp.core.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import coil.ComponentRegistry
+import coil.ImageLoader
+import coil.decode.SvgDecoder
 import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
@@ -43,6 +46,17 @@ object AppModule {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageLoader(app: Application): ImageLoader {
+        return ImageLoader.Builder(app)
+            .crossfade(true)
+            .components(fun ComponentRegistry.Builder.() {
+                add(SvgDecoder.Factory())
+            })
+            .build()
     }
 
     @Provides

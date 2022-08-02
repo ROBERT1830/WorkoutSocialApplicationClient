@@ -3,16 +3,17 @@ package com.robertconstantindinescu.woutapp.feature_authentication.data.remote.d
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.response.AuthResponseDto
+import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AuthApi {
 
+    @Multipart
     @POST("/api/user/create")
     suspend fun signUpUser(
-        @Body requestDto: SignUpRequestDto
+        @Part profileData: MultipartBody.Part,
+        @Part profileImage: MultipartBody.Part
     ): Response<Unit>
 
 

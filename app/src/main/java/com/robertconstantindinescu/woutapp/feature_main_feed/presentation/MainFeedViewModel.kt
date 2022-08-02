@@ -14,11 +14,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class MainFeedViewModel(
+class MainFeedViewModel @Inject constructor(
     private val useCases: MainFeedUseCases
-): ViewModel() {
+) : ViewModel() {
 
     var state by mutableStateOf<MainFeedState<MainFeedPostVO>>(MainFeedState())
         private set
@@ -51,7 +52,7 @@ class MainFeedViewModel(
         loadNextPosts()
     }
 
-    private fun loadNextPosts() {
+    fun loadNextPosts() {
         viewModelScope.launch {
             paginator.loadNextPosts()
         }

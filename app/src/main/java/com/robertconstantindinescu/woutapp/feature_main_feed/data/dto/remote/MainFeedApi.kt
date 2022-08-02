@@ -1,5 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_main_feed.data.dto.remote
 
+import com.robertconstantindinescu.woutapp.core.data.response.ApiResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -10,4 +11,8 @@ interface MainFeedApi {
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): Response<List<PostRequest>>
+
+    companion object {
+        const val MAIN_FEED_BASE_URL = "http://10.0.2.2:8001/"
+    }
 }

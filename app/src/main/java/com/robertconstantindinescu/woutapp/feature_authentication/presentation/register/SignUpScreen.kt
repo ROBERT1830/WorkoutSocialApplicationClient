@@ -1,8 +1,13 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.presentation.register
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
@@ -18,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,9 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.components.StandardTexField
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
+import com.robertconstantindinescu.woutapp.core.util.CropActivityResultContract
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.AuthError
@@ -38,15 +48,32 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpScreen(
     scaffoldState: ScaffoldState,
+    imageLoader: ImageLoader,
     onLoginNavigation: (email: String?) -> Unit = {},
     onShowSnackBar: (text: UiText) -> Unit = {},
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
     val dimens = LocalSpacing.current
+    val profileimageState = viewModel.profileImageState
     val usernameState = viewModel.usernameState
     val emailState = viewModel.emailState
     val passwordState = viewModel.passwordState
+
+    val cropProfilePictureLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(1f, 1f)
+    ) {
+        viewModel.onEvent(SignUpEvent.OnCropImage(it))
+    }
+
+    val profilePictureGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        if(it == null) {
+            return@rememberLauncherForActivityResult
+        }
+        cropProfilePictureLauncher.launch(it)
+    }
 
 
     //Receive single Ui events
@@ -99,6 +126,25 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
+
+            Image(
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .size(50.dp)
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    )
+                    .clickable { profilePictureGalleryLauncher.launch("image/*") },
+                painter = rememberAsyncImagePainter(
+                    model = profileimageState,
+                    imageLoader = imageLoader
+                ),
+                contentDescription = stringResource(id = R.string.sign_profile_image)
+            )
+
 
             Spacer(modifier = Modifier.height(dimens.spaceLarge))
             StandardTexField(

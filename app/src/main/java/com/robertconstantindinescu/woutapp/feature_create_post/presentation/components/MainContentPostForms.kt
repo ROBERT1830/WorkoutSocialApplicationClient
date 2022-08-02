@@ -1,10 +1,8 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.presentation.components
 
-import android.widget.ScrollView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAPhoto
@@ -26,7 +24,7 @@ import com.robertconstantindinescu.woutapp.feature_create_post.presentation.Post
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.PostViewModel
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util.CreatePostConstants.IMAGE_HEIGHT
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util.CreatePostConstants.IMAGE_WIDTH
-import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util.CropActivityResultContract
+import com.robertconstantindinescu.woutapp.core.util.CropActivityResultContract
 
 @Composable
 fun MainContentPostForms(

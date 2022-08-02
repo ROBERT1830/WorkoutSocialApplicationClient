@@ -14,5 +14,6 @@ fun PostRequest.toMainFeedPostModel(): MainFeedPostDM =
         location = location,
         subscriptionsCount = subscriptionsCount,
         likeCount = likeCount, // I think that wont be used......
-        isAddedToFavorites = isAddedToFavorites
+        isAddedToFavorites = isAddedToFavorites,
+        isUserSubscribed = isUserSubscribed
     )

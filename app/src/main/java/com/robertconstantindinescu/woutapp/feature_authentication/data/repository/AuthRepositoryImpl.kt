@@ -2,6 +2,9 @@ package com.robertconstantindinescu.woutapp.feature_authentication.data.reposito
 
 
 import android.content.SharedPreferences
+import android.net.Uri
+import androidx.core.net.toFile
+import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
@@ -14,24 +17,38 @@ import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dt
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class AuthRepositoryImpl(
     private val api: AuthApi,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
 ) : AuthRepository {
 
     override suspend fun signUpUser(
+        profileImage: Uri,
         name: String,
         email: String,
         password: String
     ): DefaultApiResource {
 
+        val profileImageFile = profileImage.toFile()
+
         val response = callApi {
             api.signUpUser(
-                SignUpRequestDto(
-                    name = name,
-                    email = email,
-                    password = password
+                profileData = MultipartBody.Part.createFormData(
+                    "profile_data",
+                    value = gson.toJson(SignUpRequestDto(
+                        name = name,
+                        email = email,
+                        password = password
+                    ))
+                ),
+                profileImage = MultipartBody.Part.createFormData(
+                    name = "profile_image",
+                    filename = profileImageFile.name,
+                    body = profileImageFile.asRequestBody()
                 )
             )
         }

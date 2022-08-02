@@ -11,7 +11,7 @@ class PaginatorImpl<T>(
 
     override suspend fun loadNextPosts() {
         onLoad(true)
-        when (val result = onRequest(0)) {
+        when (val result = onRequest(page)) {
             is Resource.Success -> {
                 page++
                 //if no data cames then means that we reached the end of the list and an emptyList will

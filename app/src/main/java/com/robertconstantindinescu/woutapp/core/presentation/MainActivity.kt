@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import coil.ImageLoader
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.robertconstantindinescu.woutapp.LoginScreen
 import com.robertconstantindinescu.woutapp.R
@@ -32,9 +34,15 @@ import com.robertconstantindinescu.woutapp.feature_create_post.presentation.Crea
 import com.robertconstantindinescu.woutapp.feature_main_feed.presentation.MainFeedScreen
 import com.robertconstantindinescu.woutapp.feature_splash.presentation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
+    @ExperimentalMaterial3Api
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +61,7 @@ class MainActivity : ComponentActivity() {
                 )
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
@@ -160,7 +167,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(route = BottomMenuScreen.MainFeedScreen.route) {
-                                MainFeedScreen()
+                                MainFeedScreen(imageLoader = imageLoader)
                             }
 
                             composable(route = BottomMenuScreen.FavoritesScreen.route) {
