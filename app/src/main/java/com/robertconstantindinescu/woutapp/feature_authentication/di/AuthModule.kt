@@ -1,10 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.di
 
-import android.app.Application
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.robertconstantindinescu.woutapp.core.util.CoreConstants.SHARED_PREF_NAME
+import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi.Companion.AUT_BASE_URL
 import com.robertconstantindinescu.woutapp.feature_authentication.data.repository.AuthRepositoryImpl
@@ -36,12 +33,10 @@ object AuthModule {
             .create(AuthApi::class.java)
     }
 
-
-
     @Provides
     @Singleton
-    fun provideAuthRepository(api: AuthApi, sharedPreferences: SharedPreferences): AuthRepository {
-        return AuthRepositoryImpl(api, sharedPreferences)
+    fun provideAuthRepository(api: AuthApi, sharedPreferences: SharedPreferences, gson: Gson): AuthRepository {
+        return AuthRepositoryImpl(api, sharedPreferences, gson)
     }
 
     @Provides

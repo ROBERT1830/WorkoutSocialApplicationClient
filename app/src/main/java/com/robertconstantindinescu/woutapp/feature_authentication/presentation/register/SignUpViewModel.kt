@@ -1,5 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.presentation.register
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,6 +24,9 @@ class SignUpViewModel @Inject constructor(
     private val userCases: AuthUseCases
 ) : ViewModel() {
 
+    var profileImageState by  mutableStateOf<Uri?>(null)
+        private set
+
     var usernameState by mutableStateOf(AuthStandardFieldState())
         private set
 
@@ -40,6 +44,8 @@ class SignUpViewModel @Inject constructor(
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
+            is SignUpEvent.OnCropImage -> { profileImageState = event.uri }
+            is SignUpEvent.OnPickPhoto -> { profileImageState = event.uri }
             is SignUpEvent.OnEnterUserName -> {
                 usernameState = usernameState.copy(
                     text = event.name,
@@ -62,9 +68,7 @@ class SignUpViewModel @Inject constructor(
                     isPasswordHide = !passwordState.isPasswordHide
                 )
             }
-            is SignUpEvent.OnRegisterClick -> {
-                signUpUser()
-            }
+            is SignUpEvent.OnRegisterClick -> { signUpUser() }
         }
     }
 
@@ -82,26 +86,32 @@ class SignUpViewModel @Inject constructor(
                     error = null))
 
             val signUpResult = userCases.signUpUseCase(
+                profileImageState,
                 usernameState.text,
                 emailState.text,
                 passwordState.authStandardFieldState.text
             )
 
             //Fields validation
-            if (signUpResult.username != null) {
-                usernameState = usernameState.copy(error = signUpResult.username)
+            if (signUpResult.profileImageError != null) {
+                profileImageState = null
+                _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.profile_image_not_empty)))
             }
 
-            if (signUpResult.email != null) {
-                emailState = emailState.copy(error = signUpResult.email)
+            if (signUpResult.usernameError != null) {
+                usernameState = usernameState.copy(error = signUpResult.usernameError)
             }
 
-            if (signUpResult.password != null) {
+            if (signUpResult.emailError != null) {
+                emailState = emailState.copy(error = signUpResult.emailError)
+            }
+
+            if (signUpResult.passwordError != null) {
                 passwordState =
-                    passwordState.copy(authStandardFieldState = AuthStandardFieldState(error = signUpResult.password))
+                    passwordState.copy(authStandardFieldState = AuthStandardFieldState(error = signUpResult.passwordError))
             }
 
-            when(signUpResult.result) {
+            when(signUpResult.resultError) {
                 is Resource.Success -> {
                     registerState = registerState.copy(
                         isLoading = false,
@@ -118,7 +128,7 @@ class SignUpViewModel @Inject constructor(
                     registerState = registerState.copy(
                         isLoading = false
                     )
-                    _uiEvent.send(UiEvent.ShowSnackBar(signUpResult.result.text ?: UiText.unknownError()))
+                    _uiEvent.send(UiEvent.ShowSnackBar(signUpResult.resultError.text ?: UiText.unknownError()))
                 }
                 //If happen field error, result is null
                 null -> registerState = registerState.copy(isLoading = false)

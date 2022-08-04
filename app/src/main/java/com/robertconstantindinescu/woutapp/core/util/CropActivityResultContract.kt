@@ -1,10 +1,11 @@
-package com.robertconstantindinescu.woutapp.feature_create_post.presentation.util
+package com.robertconstantindinescu.woutapp.core.util
 
 import android.content.Context
 import android.content.Intent
 import android.content.RestrictionsManager
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
+import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util.getFileName
 import com.yalantis.ucrop.UCrop
 import java.io.File
 

@@ -4,8 +4,9 @@ import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.AuthError
 
 data class SignUpUserValidation(
-    val username: AuthError? = null,
-    val email: AuthError? = null,
-    val password: AuthError? = null,
-    val result: DefaultApiResource? = null,
+    val profileImageError: AuthError? = null,
+    val usernameError: AuthError? = null,
+    val emailError: AuthError? = null,
+    val passwordError: AuthError? = null,
+    val resultError: DefaultApiResource? = null,
 )

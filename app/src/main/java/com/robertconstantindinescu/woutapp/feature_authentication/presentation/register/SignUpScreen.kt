@@ -1,15 +1,18 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.presentation.register
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,9 +33,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.rememberAsyncImagePainter
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.components.StandardTexField
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
+import com.robertconstantindinescu.woutapp.core.util.CropActivityResultContract
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.AuthError
@@ -38,15 +47,32 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpScreen(
     scaffoldState: ScaffoldState,
+    imageLoader: ImageLoader,
     onLoginNavigation: (email: String?) -> Unit = {},
     onShowSnackBar: (text: UiText) -> Unit = {},
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
     val dimens = LocalSpacing.current
+    val profileimageState = viewModel.profileImageState
     val usernameState = viewModel.usernameState
     val emailState = viewModel.emailState
     val passwordState = viewModel.passwordState
+
+    val cropProfilePictureLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(1f, 1f)
+    ) {
+        viewModel.onEvent(SignUpEvent.OnCropImage(it))
+    }
+
+    val profilePictureGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        if(it == null) {
+            return@rememberLauncherForActivityResult
+        }
+        cropProfilePictureLauncher.launch(it)
+    }
 
 
     //Receive single Ui events
@@ -67,10 +93,12 @@ fun SignUpScreen(
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(dimens.spaceMedium)
+
     ) {
 
         Row(
@@ -91,15 +119,39 @@ fun SignUpScreen(
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }
-
         }
 
+        Spacer(modifier = Modifier.height(dimens.spaceMedium))
 
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxSize()
         ) {
-
+            Box(
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    )
+                    .clickable { profilePictureGalleryLauncher.launch("image/*") },
+                contentAlignment = Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AddAPhoto,
+                    contentDescription = stringResource(id = R.string.create_post_screen_choose_image),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+                profileimageState?.let { uri ->
+                    Image(
+                        modifier = Modifier.matchParentSize(),
+                        painter = rememberAsyncImagePainter(model = uri, imageLoader = imageLoader),
+                        contentDescription = stringResource(id = R.string.sign_profile_image)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(dimens.spaceLarge))
             StandardTexField(
                 modifier = Modifier.padding(
@@ -206,32 +258,38 @@ fun SignUpScreen(
 
                 }
             }
+
+            Spacer(modifier = Modifier.height(dimens.spaceMedium))
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = dimens.spaceLarge)
+                    .clickable(
+                        onClick = {
+                            onLoginNavigation(null)
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
+                textAlign = TextAlign.Center,
+                text = buildAnnotatedString {
+                    append(stringResource(id = R.string.signup_screen_already_have_account))
+                    append(" ")
+                    val signUpText = stringResource(id = R.string.signup_screen_sign_in)
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        append(signUpText)
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
         }
-        Text(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = dimens.spaceLarge)
-                .clickable(
-                    onClick = {
-                        onLoginNavigation(null)
-                    },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
-            text = buildAnnotatedString {
-                append(stringResource(id = R.string.signup_screen_already_have_account))
-                append(" ")
-                val signUpText = stringResource(id = R.string.signup_screen_sign_in)
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    append(signUpText)
-                }
-            },
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.secondary
-        )
+
+
     }
 }
