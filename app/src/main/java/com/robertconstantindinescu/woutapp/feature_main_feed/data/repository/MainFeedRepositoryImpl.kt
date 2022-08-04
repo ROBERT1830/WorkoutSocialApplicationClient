@@ -12,8 +12,8 @@ import com.robertconstantindinescu.woutapp.feature_main_feed.domain.repository.M
 class MainFeedRepositoryImpl(
     private val api: MainFeedApi
 ): MainFeedRepository {
-    override suspend fun getAllPosts(/*ownUserId: String, from token server side*/ page: Int, pageSize: Int):
-            Resource<List<MainFeedPostDM>> {
+    /*ownUserId: String, from token server side*/
+    override suspend fun getAllPosts(page: Int, pageSize: Int): Resource<List<MainFeedPostDM>> {
         val response = callApi {
             api.getAllPosts(page, pageSize)
         }

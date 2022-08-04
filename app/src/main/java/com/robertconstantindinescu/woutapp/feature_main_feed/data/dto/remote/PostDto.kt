@@ -1,6 +1,6 @@
-package com.robertconstantindinescu.woutapp.feature_main_feed.domain.model
+package com.robertconstantindinescu.woutapp.feature_main_feed.data.dto.remote
 
-data class MainFeedPostDM(
+data class PostDto(
     val postId: String?,
     val userId: String?,
     val userName: String?,

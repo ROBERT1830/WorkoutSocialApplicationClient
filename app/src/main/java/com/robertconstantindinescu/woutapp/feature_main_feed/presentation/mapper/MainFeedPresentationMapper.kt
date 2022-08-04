@@ -9,11 +9,11 @@ fun MainFeedPostDM.toMainFeedPostVO(): MainFeedPostVO =
         userId = userId,
         userName = userName,
         imageUrl = imageUrl,
+        profileImage = profileImage,
         sportType = sportType,
         description = description,
         location = location,
         subscriptionsCount = subscriptionsCount,
-        likeCount = likeCount, // I think that wont be used......
         isAddedToFavorites = isAddedToFavorites,
         isUserSubscribed = isUserSubscribed
     )

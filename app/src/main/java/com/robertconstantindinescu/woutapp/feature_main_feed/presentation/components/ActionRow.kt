@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_main_feed.presentation.components
 
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,9 +8,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.*
+import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.DarkGreen10
+import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.Green10
+import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
 
 @Composable
 fun ActionRow(
@@ -55,7 +56,7 @@ fun ActionRow(
                 } else stringResource(id = R.string.add_to_favorites),
                 tint = if (isAddedToFavorites) {
                     MaterialTheme.colorScheme.primary
-                } else GreenGrey90
+                } else Green10
             )
         }
         Spacer(modifier = Modifier.width(dimens.spaceSmall))
@@ -81,16 +82,19 @@ fun ActionRow(
             color = DarkGreen10,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
+
                 .clip(RoundedCornerShape(dimens.spaceSmall))
                 .background(
                     if (isUserSubscribed)
                         MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurface
                 )
+
                 .clickable {
                     onSubscribeClick()
                 }
                 .padding(dimens.spaceSmall)
+
 
         )
     }

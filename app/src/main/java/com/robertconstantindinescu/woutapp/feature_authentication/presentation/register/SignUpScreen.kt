@@ -3,6 +3,7 @@ package com.robertconstantindinescu.woutapp.feature_authentication.presentation.
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,10 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -94,10 +93,12 @@ fun SignUpScreen(
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(dimens.spaceMedium)
+
     ) {
 
         Row(
@@ -118,19 +119,17 @@ fun SignUpScreen(
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }
-
         }
 
+        Spacer(modifier = Modifier.height(dimens.spaceMedium))
 
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxSize()
         ) {
-
-            Image(
+            Box(
                 modifier = Modifier
                     .align(CenterHorizontally)
-                    .size(50.dp)
+                    .size(100.dp)
                     .clip(CircleShape)
                     .border(
                         width = 1.dp,
@@ -138,14 +137,21 @@ fun SignUpScreen(
                         shape = CircleShape
                     )
                     .clickable { profilePictureGalleryLauncher.launch("image/*") },
-                painter = rememberAsyncImagePainter(
-                    model = profileimageState,
-                    imageLoader = imageLoader
-                ),
-                contentDescription = stringResource(id = R.string.sign_profile_image)
-            )
-
-
+                contentAlignment = Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AddAPhoto,
+                    contentDescription = stringResource(id = R.string.create_post_screen_choose_image),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+                profileimageState?.let { uri ->
+                    Image(
+                        modifier = Modifier.matchParentSize(),
+                        painter = rememberAsyncImagePainter(model = uri, imageLoader = imageLoader),
+                        contentDescription = stringResource(id = R.string.sign_profile_image)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(dimens.spaceLarge))
             StandardTexField(
                 modifier = Modifier.padding(
@@ -252,32 +258,38 @@ fun SignUpScreen(
 
                 }
             }
+
+            Spacer(modifier = Modifier.height(dimens.spaceMedium))
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = dimens.spaceLarge)
+                    .clickable(
+                        onClick = {
+                            onLoginNavigation(null)
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
+                textAlign = TextAlign.Center,
+                text = buildAnnotatedString {
+                    append(stringResource(id = R.string.signup_screen_already_have_account))
+                    append(" ")
+                    val signUpText = stringResource(id = R.string.signup_screen_sign_in)
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        append(signUpText)
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
         }
-        Text(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = dimens.spaceLarge)
-                .clickable(
-                    onClick = {
-                        onLoginNavigation(null)
-                    },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
-            text = buildAnnotatedString {
-                append(stringResource(id = R.string.signup_screen_already_have_account))
-                append(" ")
-                val signUpText = stringResource(id = R.string.signup_screen_sign_in)
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    append(signUpText)
-                }
-            },
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.secondary
-        )
+
+
     }
 }

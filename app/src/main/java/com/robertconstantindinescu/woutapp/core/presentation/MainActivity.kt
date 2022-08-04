@@ -162,7 +162,8 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
 
-                                    }
+                                    },
+                                    imageLoader = imageLoader
                                 )
                             }
 

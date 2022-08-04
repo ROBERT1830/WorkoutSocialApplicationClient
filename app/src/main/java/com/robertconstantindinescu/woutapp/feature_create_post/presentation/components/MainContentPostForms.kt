@@ -96,7 +96,7 @@ fun MainContentPostForms(
                 //modifier = Modifier.padding(dimens.spaceSmall),
                 text = formsState.description,
                 singleLine = false,
-                maxLines = 5,
+                maxLines = 4,
                 onValueChange = {
                     viewModel.onEvent(PostEvents.onEnterDesscription(it))
                 },

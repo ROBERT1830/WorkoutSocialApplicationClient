@@ -24,10 +24,10 @@ class MainFeedViewModel @Inject constructor(
     var state by mutableStateOf<MainFeedState<MainFeedPostVO>>(MainFeedState())
         private set
 
-    var _uiEvent = Channel<UiEvent<Any>>()
+    private var _uiEvent = Channel<UiEvent<Any>>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    val paginator = PaginatorImpl(
+    private val paginator = PaginatorImpl(
         onLoad = {
             state = state.copy(
                 isLoading = it

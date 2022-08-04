@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+
 
 package com.robertconstantindinescu.woutapp.core.presentation.components
 
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
 
-
+@ExperimentalMaterial3Api
 @Composable
 fun StandardTexField(
     modifier: Modifier = Modifier,
@@ -58,7 +58,8 @@ fun StandardTexField(
         // TODO: Round borders nad shadow
         Card(
             modifier = Modifier
-                .fillMaxWidth(), elevation = CardDefaults.cardElevation(5.dp),
+                .fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(5.dp),
             shape = roundedCorner
         ) {
             TextField(

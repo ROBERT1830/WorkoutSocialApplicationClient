@@ -59,4 +59,7 @@
     <string name="main_feed_subscribe_event">Subscribe</string>
     <string name="sign_profile_image">Profile image</string>
     <string name="profile_image_not_empty">Profile image must not be empty!</string>
+    <string name="main_feed_participants">Participants: </string>
+    <string name="main_feed_description_title">Event description</string>
+    <string name="main_feed_location_text">Location: %s</string>
 </resources>
