@@ -31,7 +31,8 @@ import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.B
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.WoutAppTheme
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.register.SignUpScreen
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.CreatePostScreen
-import com.robertconstantindinescu.woutapp.feature_main_feed.presentation.MainFeedScreen
+import com.robertconstantindinescu.woutapp.feature_get_posts.presentation.main_feed_screen.MainFeedScreen
+import com.robertconstantindinescu.woutapp.feature_get_posts.presentation.personal_screen.PersonalScreen
 import com.robertconstantindinescu.woutapp.feature_splash.presentation.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -189,6 +190,10 @@ class MainActivity : ComponentActivity() {
                                         navController.navigateUp()
                                     }
                                 )
+                            }
+
+                            composable(route = BottomMenuScreen.PersonalPostScreen.route) {
+                                PersonalScreen(imageLoader = imageLoader)
                             }
 
                         }

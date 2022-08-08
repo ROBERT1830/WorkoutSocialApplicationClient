@@ -6,6 +6,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.util.CreatePostConstants.IMAGE_WIDTH
 import com.robertconstantindinescu.woutapp.core.util.CropActivityResultContract
 
+@ExperimentalMaterial3Api
 @Composable
 fun MainContentPostForms(
     imageLoader: ImageLoader,
@@ -47,7 +49,10 @@ fun MainContentPostForms(
         //this makes the user pick some content (images)
         contract = ActivityResultContracts.GetContent()
     ){
-        cropActivityLauncher.launch(it)
+        it?.let {
+            cropActivityLauncher.launch(it)
+        } ?: run { return@rememberLauncherForActivityResult }
+
     }
 
 

@@ -10,16 +10,16 @@ object CoreConstants {
     const val MAIN_FEED = "Feed"
 
     const val PERSONAL_POST_SCREEN = "personal_post_screen"
-    const val PERSONAL_POST = "personal_post"
+    const val PERSONAL_POST = "My posts"
 
     const val FAVORITES_SCREEN = "favorites_screen"
     const val FAVORITES = "Favorites"
 
     const val CREATE_POST_SCREEN = "create_post_screen"
-    const val CREATE_POST = "create_post"
+    const val CREATE_POST = "Create Post"
 
     const val ACTIVITY_SCREEN = "activity_screen"
-    const val ACTIVITY = "activity"
+    const val ACTIVITY = "Activity"
 
 
 

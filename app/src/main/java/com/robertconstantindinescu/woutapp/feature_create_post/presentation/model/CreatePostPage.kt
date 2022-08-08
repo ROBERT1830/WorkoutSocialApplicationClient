@@ -1,6 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.presentation.model
 
 import android.content.Context
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import coil.ImageLoader
@@ -22,6 +23,7 @@ sealed class CreatePostPage(
         }
 
     )
+    @ExperimentalMaterial3Api
     object Second: CreatePostPage(
         title = UiText.StringResource(R.string.create_post_forms),
         description = UiText.StringResource(R.string.complete_post_forms),
