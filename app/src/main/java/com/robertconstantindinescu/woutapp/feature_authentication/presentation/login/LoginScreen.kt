@@ -29,6 +29,7 @@ import com.robertconstantindinescu.woutapp.feature_authentication.presentation.l
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.login.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
 
+@ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(
     onSignUpClick: () -> Unit = {},
