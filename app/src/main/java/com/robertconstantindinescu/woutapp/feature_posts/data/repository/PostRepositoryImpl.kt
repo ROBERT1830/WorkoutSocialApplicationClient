@@ -1,15 +1,10 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.PagingSource
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.Resource
-import com.robertconstantindinescu.woutapp.core.util.UiText
-import com.robertconstantindinescu.woutapp.core.util.callApi
+import com.robertconstantindinescu.woutapp.core.util.*
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritesPostDao
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.MainFeedApi
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.request.SubscribtionRequest
 import com.robertconstantindinescu.woutapp.feature_posts.data.mapper.toFavoritePostEntity
 import com.robertconstantindinescu.woutapp.feature_posts.data.mapper.toPostDM
 import com.robertconstantindinescu.woutapp.feature_posts.domain.model.PostDM
@@ -18,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PostRepositoryImpl(
-    private val api: MainFeedApi,
+    private val api: PostApi,
     private val local: FavoritesPostDao
 ): PostRepository {
     /*ownUserId: String, from token server side*/
@@ -94,5 +89,39 @@ class PostRepositoryImpl(
 
     override suspend fun deletePostFromFavorites(postDM: PostDM) {
         local.deletePostFromFavorites(postDM.toFavoritePostEntity())
+    }
+
+    override suspend fun subscribeUser(postId: String): DefaultApiResource {
+        val response = callApi {
+            api.subscribeUser(SubscribtionRequest(postId = postId))
+        }
+
+        return when(response.successful) {
+            true -> {
+                Resource.Success<Unit>()
+            }
+            false -> {
+                response.message?.let { serverMsg ->
+                    Resource.Error(UiText.DynamicString(serverMsg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
+    }
+
+    override suspend fun unsubscribeUser(postId: String): DefaultApiResource {
+        val response = callApi {
+            api.unsubscribeUser(SubscribtionRequest(postId = postId))
+        }
+
+        return when(response.successful) {
+            true -> {
+                Resource.Success<Unit>()
+            }
+            false -> {
+                response.message?.let { serverMsg ->
+                    Resource.Error(UiText.DynamicString(serverMsg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
     }
 }

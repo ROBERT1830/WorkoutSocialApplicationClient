@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robertconstantindinescu.woutapp.core.util.PaginatorImpl
+import com.robertconstantindinescu.woutapp.core.util.paginator.PaginatorImpl
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
+import com.robertconstantindinescu.woutapp.core.util.subscriptor.PostSubscriptor
 import com.robertconstantindinescu.woutapp.feature_posts.domain.use_case.PostUseCases
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.mapper.toPostDM
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.state.PostState
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainFeedScreenViewModel @Inject constructor(
-    private val useCases: PostUseCases
+    private val useCases: PostUseCases,
+    private val postSubscriptor: PostSubscriptor
 ) : ViewModel() {
 
     var mainFeedScreenState by mutableStateOf<PostState<PostVO>>(PostState())
@@ -87,8 +89,12 @@ class MainFeedScreenViewModel @Inject constructor(
             is MainFeedEvent.OnFavoriteClick -> {
                 savePostIntoFavorites(event.post)
             }
+            is MainFeedEvent.OnToggleSubscription -> {
+                toogleSubscription(event.postId)
+            }
         }
     }
+
 
     private fun savePostIntoFavorites(post: PostVO) {
         viewModelScope.launch {
@@ -102,6 +108,22 @@ class MainFeedScreenViewModel @Inject constructor(
         }
     }
 
+    private fun toogleSubscription(postId: String) {
+        viewModelScope.launch {
+            postSubscriptor.togglePostSubscriptor(
+                posts = mainFeedScreenState.items,
+                postId = postId,
+                onRequest = { isUserSubscribed ->
+                    useCases.toggleSubscribtionUseCase(postId, isUserSubscribed)
+                },
+                onStateUpdate = { posts ->
+                    mainFeedScreenState = mainFeedScreenState.copy(
+                        items = posts
+                    )
+                }
+            )
+        }
+    }
 
 
 }

@@ -98,7 +98,6 @@ fun ActionRow(
                             MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.onSurface
                     )
-
                     .clickable {
                         onSubscribeClick()
                     }
