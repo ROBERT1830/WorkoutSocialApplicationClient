@@ -1,5 +1,6 @@
 package com.robertconstantindinescu.woutapp.core.util.subscriptor
 
+import android.util.Log
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model.PostVO
@@ -20,13 +21,13 @@ class PostSubscriptorImpl: PostSubscriptor {
                 if (post.postId == postId) {
                     post.copy(
                         isUserSubscribed = !post.isUserSubscribed!!,
-                        subscriptionsCount = if (currentlySubscribed) post.subscriptionsCount!! -1
-                        else (post.subscriptionsCount!! - 1).coerceAtLeast(0)
+                        subscriptionsCount = if (currentlySubscribed) (post.subscriptionsCount!! -1).coerceAtLeast(0)
+                        else (post.subscriptionsCount!! + 1)
                     )
+
                 }else post
             }
         )
-
         when (onRequest(currentlySubscribed)) {
             is Resource.Success -> Unit
             is Resource.Error -> {

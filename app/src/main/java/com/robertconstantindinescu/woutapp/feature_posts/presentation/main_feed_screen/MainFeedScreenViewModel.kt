@@ -1,5 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
