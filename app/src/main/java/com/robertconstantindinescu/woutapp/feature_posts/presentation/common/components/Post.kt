@@ -157,6 +157,9 @@ fun Post(
                 excludeShare = false,
                 onFavoritesClick = {
                     onFavoritesClick()
+                },
+                onSubscribeClick = {
+                    onSubscribeClick()
                 }
             )
         }

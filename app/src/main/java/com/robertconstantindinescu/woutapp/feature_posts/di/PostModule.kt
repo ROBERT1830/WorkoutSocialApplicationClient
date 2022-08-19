@@ -2,10 +2,11 @@ package com.robertconstantindinescu.woutapp.feature_posts.di
 
 import android.app.Application
 import androidx.room.Room
+import com.robertconstantindinescu.woutapp.core.util.subscriptor.PostSubscriptor
+import com.robertconstantindinescu.woutapp.core.util.subscriptor.PostSubscriptorImpl
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.FavoritePostDatabase
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritesPostDao
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.MainFeedApi
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.MainFeedApi.Companion.MAIN_FEED_BASE_URL
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi.Companion.MAIN_FEED_BASE_URL
 import com.robertconstantindinescu.woutapp.feature_posts.data.repository.PostRepositoryImpl
 import com.robertconstantindinescu.woutapp.feature_posts.data.util.Constants.POST_FAVORITE_DATABASE_NAME
 import com.robertconstantindinescu.woutapp.feature_posts.domain.repository.PostRepository
@@ -13,6 +14,7 @@ import com.robertconstantindinescu.woutapp.feature_posts.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -21,17 +23,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object MainFeedModule {
+object PostModule {
     @Provides
     @Singleton
-    fun provideMainFeedApi(okHttpClient: OkHttpClient): MainFeedApi {
+    fun providePostApi(okHttpClient: OkHttpClient): PostApi {
         return Retrofit.Builder()
             .baseUrl(MAIN_FEED_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-            .create(MainFeedApi::class.java)
+            .create(PostApi::class.java)
     }
+
 
     // TODO: Provide database and dao
     @Provides
@@ -46,7 +49,7 @@ object MainFeedModule {
 
     @Provides
     @Singleton
-    fun provideMainFeedRepository(api: MainFeedApi, db: FavoritePostDatabase): PostRepository {
+    fun providePostRepository(api: PostApi, db: FavoritePostDatabase): PostRepository {
         return PostRepositoryImpl(api, db.dao)
     }
 
@@ -58,7 +61,13 @@ object MainFeedModule {
             personalGetAllPostsUseCase = PersonalGetAllPostsUseCase(repository),
             insertPostIntoFavoritesUseCase = InsertPostIntoFavoritesUseCase(repository),
             deleteFromFavoritesUseCase = DeleteFromFavoritesUseCase(repository),
-            getAllFavoritesPostsUseCase = GetAllFavoritesPostsUseCase(repository)
+            getAllFavoritesPostsUseCase = GetAllFavoritesPostsUseCase(repository),
+            toggleSubscribtionUseCase = ToggleSubscribtionUseCase(repository)
         )
     }
+
+    @Provides
+    @Singleton
+    fun providePostSubscriptor(): PostSubscriptor = PostSubscriptorImpl()
+
 }

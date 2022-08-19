@@ -4,6 +4,7 @@ import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_
 
 sealed class MainFeedEvent {
     data class OnFavoriteClick(val post: PostVO): MainFeedEvent()
+    data class OnToggleSubscription(val postId: String): MainFeedEvent()
     //Share
     //Suscribe to evenrt
 }

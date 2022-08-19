@@ -41,8 +41,10 @@ fun MainFeedScreen(
                     imageLoader = imageLoader,
                     onFavoritesClick = {
                         viewModel.onEvent(MainFeedEvent.OnFavoriteClick(post))
+                    },
+                    onSubscribeClick = {
+                        viewModel.onEvent(MainFeedEvent.OnToggleSubscription(post.postId))
                     }
-
                 )
                 if (index == state.items.size - 1 && state.endReached) {
                     Spacer(modifier = Modifier.height(dimens.spaceExtraLarge + dimens.spaceSmall))

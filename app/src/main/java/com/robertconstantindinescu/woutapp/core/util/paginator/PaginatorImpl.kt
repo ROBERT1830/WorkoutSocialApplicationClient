@@ -1,4 +1,7 @@
-package com.robertconstantindinescu.woutapp.core.util
+package com.robertconstantindinescu.woutapp.core.util.paginator
+
+import com.robertconstantindinescu.woutapp.core.util.Resource
+import com.robertconstantindinescu.woutapp.core.util.UiText
 
 class PaginatorImpl<Key, Item>(
     private val initialKey: Key,

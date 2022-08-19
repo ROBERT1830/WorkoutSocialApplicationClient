@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robertconstantindinescu.woutapp.core.util.PaginatorImpl
+import com.robertconstantindinescu.woutapp.core.util.paginator.PaginatorImpl
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.feature_posts.domain.use_case.PostUseCases
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.state.PostState

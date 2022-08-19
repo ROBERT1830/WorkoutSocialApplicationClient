@@ -1,6 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_posts.domain.repository
 
 import androidx.paging.PagingData
+import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.feature_posts.domain.model.PostDM
 import kotlinx.coroutines.flow.Flow
@@ -13,4 +14,7 @@ interface PostRepository {
     fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>>
     suspend fun insertPostIntoFavorites(postDM: PostDM)
     suspend fun deletePostFromFavorites(postDM: PostDM)
+
+    suspend fun subscribeUser(postId: String): DefaultApiResource
+    suspend fun unsubscribeUser(postId: String): DefaultApiResource
 }

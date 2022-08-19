@@ -1,4 +1,4 @@
-package com.robertconstantindinescu.woutapp.core.util
+package com.robertconstantindinescu.woutapp.core.util.paginator
 
 interface Paginator {
     suspend fun loadNextPosts()

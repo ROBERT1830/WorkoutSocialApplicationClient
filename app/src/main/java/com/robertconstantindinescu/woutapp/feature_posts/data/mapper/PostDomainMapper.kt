@@ -1,8 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.mapper
 
-import androidx.paging.PagingData
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritePostEntity
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostDto
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.response.PostDto
 import com.robertconstantindinescu.woutapp.feature_posts.domain.model.PostDM
 
 fun PostDto.toPostDM(): PostDM =

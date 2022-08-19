@@ -1,4 +1,4 @@
-package com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote
+package com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.response
 
 data class PostDto(
     val postId: String,
