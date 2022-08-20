@@ -6,5 +6,6 @@ data class PostUseCases(
     val insertPostIntoFavoritesUseCase: InsertPostIntoFavoritesUseCase,
     val deleteFromFavoritesUseCase: DeleteFromFavoritesUseCase,
     val getAllFavoritesPostsUseCase: GetAllFavoritesPostsUseCase,
-    val toggleSubscribtionUseCase: ToggleSubscribtionUseCase
+    val toggleSubscribtionUseCase: ToggleSubscribtionUseCase,
+    val getPostDetailsUseCase: GetPostDetailsUseCase
 )

@@ -62,7 +62,8 @@ object PostModule {
             insertPostIntoFavoritesUseCase = InsertPostIntoFavoritesUseCase(repository),
             deleteFromFavoritesUseCase = DeleteFromFavoritesUseCase(repository),
             getAllFavoritesPostsUseCase = GetAllFavoritesPostsUseCase(repository),
-            toggleSubscribtionUseCase = ToggleSubscribtionUseCase(repository)
+            toggleSubscribtionUseCase = ToggleSubscribtionUseCase(repository),
+            getPostDetailsUseCase = GetPostDetailsUseCase(repository)
         )
     }
 

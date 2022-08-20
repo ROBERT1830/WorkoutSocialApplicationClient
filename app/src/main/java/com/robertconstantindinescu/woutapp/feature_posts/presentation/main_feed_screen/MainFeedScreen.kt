@@ -19,8 +19,8 @@ import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.com
 @Composable
 fun MainFeedScreen(
     imageLoader: ImageLoader,
-    onDetailNavigate: (postId: String) -> Unit = {},
-    viewModel: MainFeedScreenViewModel = hiltViewModel()
+    viewModel: MainFeedScreenViewModel = hiltViewModel(),
+    onDetailNavigate: (postId: String) -> Unit = {}
 ) {
 
     val dimens = LocalSpacing.current
@@ -44,6 +44,9 @@ fun MainFeedScreen(
                     },
                     onSubscribeClick = {
                         viewModel.onEvent(MainFeedEvent.OnToggleSubscription(post.postId))
+                    },
+                    onDetailNavigate = {
+                        onDetailNavigate(it)
                     }
                 )
                 if (index == state.items.size - 1 && state.endReached) {

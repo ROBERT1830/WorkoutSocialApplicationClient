@@ -63,6 +63,25 @@ class PostRepositoryImpl(
         }
     }
 
+    override suspend fun getPostDetails(postId: String): Resource<PostDM> {
+        val response = callApi {
+            api.getPostDetails(postId)
+        }
+
+        return when(response.successful) {
+            true -> {
+                response.data.let {
+                    Resource.Success(it?.data?.toPostDM())
+                }
+            }
+            false -> {
+                response.message?.let {
+                    Resource.Error(UiText.DynamicString(response.message))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
+    }
+
     override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
         return local.getAllFavoritesPosts(page, page * offset).map {
             it.map { post -> post.toPostDM() }

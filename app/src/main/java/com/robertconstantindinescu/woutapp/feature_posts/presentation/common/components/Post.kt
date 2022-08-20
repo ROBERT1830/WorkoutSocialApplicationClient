@@ -3,6 +3,7 @@ package com.robertconstantindinescu.woutapp.feature_posts.presentation.common.co
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +36,8 @@ fun Post(
     imageLoader: ImageLoader,
     onFavoritesClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
-    onSubscribeClick: () -> Unit = {}
+    onSubscribeClick: () -> Unit = {},
+    onDetailNavigate: (postId: String) -> Unit = {}
 ) {
     val dimens = LocalSpacing.current
     Column(
@@ -45,7 +47,7 @@ fun Post(
             .shadow(10.dp, shape = RoundedCornerShape(dimens.spaceMedium))
             .clip(RoundedCornerShape(dimens.spaceMedium))
             .background(MaterialTheme.colorScheme.inverseSurface)
-            ,
+            .clickable { onDetailNavigate(post.postId) },
     ) {
         Row(
             modifier = Modifier

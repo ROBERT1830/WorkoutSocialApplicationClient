@@ -62,4 +62,6 @@
     <string name="main_feed_participants">Participants: </string>
     <string name="main_feed_description_title">Event description</string>
     <string name="main_feed_location_text">Location: %s</string>
+    <string name="post_details_username">"Username: "</string>
+    <string name="post_details_description_title">Description</string>
 </resources>

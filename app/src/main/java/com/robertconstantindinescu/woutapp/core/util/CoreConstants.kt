@@ -20,6 +20,8 @@ object CoreConstants {
 
     const val ACTIVITY_SCREEN = "activity_screen"
     const val ACTIVITY = "Activity"
+    //Other Screens
+    const val POST_DETAILS_SCREEN = "post_details_screen"
 
 
 
