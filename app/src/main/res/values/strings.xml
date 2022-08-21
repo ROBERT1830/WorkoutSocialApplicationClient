@@ -52,6 +52,7 @@
     <string name="create_post_screen_location_hint">Event location...</string>
     <string name="must_select_sport">Yoy must select a sport type!</string>
     <string name="main_feed_post_image">Post Image</string>
+    <!-- Main Feed-->
     <string name="remove_from_favorites">Remove from favorites</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="share_post">Share Post</string>
@@ -64,4 +65,10 @@
     <string name="main_feed_location_text">Location: %s</string>
     <string name="post_details_username">"Username: "</string>
     <string name="post_details_description_title">Description</string>
+    <string name="favorites_screen_error_loading_posts">There are not favorites posts!</string>
+    <string name="share_text_for_intent">Hey!!! Look at that amazing post. Train together?\n%s</string>
+    <string name="favorites_screen_delete_post">Delete post</string>
+    <string name="favorites_screen_post_deleted">Post has been deleted!</string>
+    <string name="user_credentials_updated">User credentials have been updated!</string>
+    <string name="update_credential_screen_title">Update your basic credentials!</string>
 </resources>

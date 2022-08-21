@@ -8,6 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.MaterialTheme
@@ -30,12 +31,14 @@ fun ActionRow(
     excludeFavorite: Boolean = false,
     excludeShare: Boolean = false,
     excludeSubscribe: Boolean = false,
+    excludeDelete: Boolean = false,
     isAddedToFavorites: Boolean = false,
     isUserSubscribed: Boolean = false,
     iconSize: Dp = 40.dp,
     onFavoritesClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
-    onSubscribeClick: () -> Unit = {}
+    onSubscribeClick: () -> Unit = {},
+    onDeletePost: () -> Unit = {}
 ) {
     val dimens = LocalSpacing.current
     Row(
@@ -103,6 +106,29 @@ fun ActionRow(
                     }
                     .padding(dimens.spaceSmall)
             )
+        }
+
+        if (excludeDelete) {
+            IconButton(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(dimens.spaceMedium))
+                    .size(iconSize),
+                onClick = { onDeletePost() }
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(dimens.spaceSmall),
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = if (isAddedToFavorites) {
+                        stringResource(id = R.string.remove_from_favorites)
+                    } else stringResource(id = R.string.add_to_favorites),
+                    tint = if (isAddedToFavorites) {
+                        MaterialTheme.colorScheme.primary
+                    } else Green10
+                )
+            }
+            Spacer(modifier = Modifier.width(dimens.spaceSmall))
         }
     }
 }

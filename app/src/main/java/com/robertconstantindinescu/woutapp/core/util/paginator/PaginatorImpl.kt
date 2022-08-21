@@ -1,7 +1,12 @@
 package com.robertconstantindinescu.woutapp.core.util.paginator
 
+import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiText
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collectLatest
 
 class PaginatorImpl<Key, Item>(
     private val initialKey: Key,
@@ -36,4 +41,39 @@ class PaginatorImpl<Key, Item>(
     override fun reset() {
         currentPage = initialKey //0 by default from state
     }
+}
+
+
+class PaginatorImpl2<Key, Item>(
+    private val initialKey: Key,
+    private inline val onLoad: (nextLoad: Boolean) -> Unit,
+    private inline val onRequest: suspend (nextPage: Key) -> Flow<List<Item>>,
+    private inline val getNextKey: () -> Key,
+    private inline val onSuccess: (items: List<Item>, newKey: Key) -> Unit,
+    private inline val onError: suspend (text: UiText) -> Unit = {} //suspend because we are using channel which is a suspend function as well
+) : Paginator {
+
+    private var currentPage = initialKey
+
+    override suspend fun loadNextPosts() {
+        onLoad(true)
+
+        (onRequest(currentPage).collectLatest {
+            if (!it.isNullOrEmpty()) {
+                onSuccess(it, currentPage)
+                currentPage = getNextKey()
+                onLoad(false)
+            }
+        })
+    }
+
+    override fun reset() {
+        currentPage = initialKey //0 by default from state
+    }
+
+//    @Suppress("UNCHECKED_CAST")
+//    inline fun <reified T : Flow<List<Item>>> Job.checkIfJobIsFlow() =
+//        if (this is Flow<*>) {
+//            this as Flow<List<Item>>
+//        }else  this as Flow<List<Item>>
 }

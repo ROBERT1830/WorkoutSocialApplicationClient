@@ -35,6 +35,7 @@ import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.O
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.WoutAppTheme
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.register.SignUpScreen
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.CreatePostScreen
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.favorites.FavoriteScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.MainFeedScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.personal_screen.PersonalScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.post_details.PostDetailsScreen
@@ -195,12 +196,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             ) {
-                                Log.d("postId", it.arguments?.getString("postId").toString())
                                 PostDetailsScreen(imageLoader = imageLoader)
                             }
 
                             composable(route = BottomMenuScreen.FavoritesScreen.route) {
-
+                                FavoriteScreen(imageLoader = imageLoader, scaffoldState = scaffoldState) { postId ->
+                                    navController.navigate(OtherScreens.PostDetailsScreen.route + "/${postId}")
+                                }
                             }
 
                             composable(route = BottomMenuScreen.CreatePostScreen.route) {

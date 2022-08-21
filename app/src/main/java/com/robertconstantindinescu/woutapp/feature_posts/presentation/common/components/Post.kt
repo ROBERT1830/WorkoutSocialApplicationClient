@@ -34,10 +34,12 @@ import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_
 fun Post(
     post: PostVO,
     imageLoader: ImageLoader,
+    deleteEnabled: Boolean = false,
     onFavoritesClick: () -> Unit = {},
-    onShareClick: () -> Unit = {},
+    onShareClick: (postId: String) -> Unit = {},
     onSubscribeClick: () -> Unit = {},
-    onDetailNavigate: (postId: String) -> Unit = {}
+    onDetailNavigate: (postId: String) -> Unit = {},
+    onDeleteFavoritePost: (post: PostVO) -> Unit ={}
 ) {
     val dimens = LocalSpacing.current
     Column(
@@ -157,11 +159,18 @@ fun Post(
                 excludeFavorite = post.isAddedToFavorites != null,
                 excludeSubscribe = post.isUserSubscribed != null,
                 excludeShare = false,
+                excludeDelete = deleteEnabled,
                 onFavoritesClick = {
                     onFavoritesClick()
                 },
                 onSubscribeClick = {
                     onSubscribeClick()
+                },
+                onShareClick = {
+                    onShareClick(post.postId)
+                },
+                onDeletePost = {
+                    onDeleteFavoritePost(post)
                 }
             )
         }
