@@ -10,6 +10,7 @@ interface PostRepository {
 
     suspend fun getAllPosts(page: Int = 0, pageSize: Int): Resource<List<PostDM>>
     suspend fun getAllCurrentUserPosts(page: Int = 0, pageSize: Int): Resource<List<PostDM>>
+    suspend fun getPostDetails(postId: String): Resource<PostDM>
 
     fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>>
     suspend fun insertPostIntoFavorites(postDM: PostDM)

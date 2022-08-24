@@ -3,6 +3,7 @@ package com.robertconstantindinescu.woutapp.feature_posts.presentation.common.co
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +34,12 @@ import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_
 fun Post(
     post: PostVO,
     imageLoader: ImageLoader,
+    deleteEnabled: Boolean = false,
     onFavoritesClick: () -> Unit = {},
-    onShareClick: () -> Unit = {},
-    onSubscribeClick: () -> Unit = {}
+    onShareClick: (postId: String) -> Unit = {},
+    onSubscribeClick: () -> Unit = {},
+    onDetailNavigate: (postId: String) -> Unit = {},
+    onDeleteFavoritePost: (post: PostVO) -> Unit ={}
 ) {
     val dimens = LocalSpacing.current
     Column(
@@ -45,7 +49,7 @@ fun Post(
             .shadow(10.dp, shape = RoundedCornerShape(dimens.spaceMedium))
             .clip(RoundedCornerShape(dimens.spaceMedium))
             .background(MaterialTheme.colorScheme.inverseSurface)
-            ,
+            .clickable { onDetailNavigate(post.postId) },
     ) {
         Row(
             modifier = Modifier
@@ -155,11 +159,18 @@ fun Post(
                 excludeFavorite = post.isAddedToFavorites != null,
                 excludeSubscribe = post.isUserSubscribed != null,
                 excludeShare = false,
+                excludeDelete = deleteEnabled,
                 onFavoritesClick = {
                     onFavoritesClick()
                 },
                 onSubscribeClick = {
                     onSubscribeClick()
+                },
+                onShareClick = {
+                    onShareClick(post.postId)
+                },
+                onDeletePost = {
+                    onDeleteFavoritePost(post)
                 }
             )
         }

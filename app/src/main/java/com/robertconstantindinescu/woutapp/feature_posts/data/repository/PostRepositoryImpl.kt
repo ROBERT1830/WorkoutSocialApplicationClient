@@ -1,7 +1,9 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.repository
 
+import android.util.Log
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.*
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritePostEntity
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritesPostDao
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.request.SubscribtionRequest
@@ -63,25 +65,34 @@ class PostRepositoryImpl(
         }
     }
 
-    override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
-        return local.getAllFavoritesPosts(page, page * offset).map {
-            it.map { post -> post.toPostDM() }
+    override suspend fun getPostDetails(postId: String): Resource<PostDM> {
+        val response = callApi {
+            api.getPostDetails(postId)
         }
 
+        return when(response.successful) {
+            true -> {
+                response.data.let {
+                    Resource.Success(it?.data?.toPostDM())
+                }
+            }
+            false -> {
+                response.message?.let {
+                    Resource.Error(UiText.DynamicString(response.message))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }
     }
-        //val pagingSourceFactory = {local.getAllFavoritesPosts(page, offset) }
-//        return Pager(
-//            config = PagingConfig(pageSize = 15),
-//            pagingSourceFactory = {
-//
-//            }
-//        ).flow
-//    }
-//        local.getAllFavoritesPosts().map {
-//            it.map { post ->
-//                post.toPostDM()
-//            }
-//        }
+
+    override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
+        var mylist: List<FavoritePostEntity>? = null
+
+        return  local.getAllFavoritesPosts(offset = page * offset).map {
+            it.map { post -> post.toPostDM() }
+        }
+        //return myFavposts
+
+    }
 
     override suspend fun insertPostIntoFavorites(postDM: PostDM) {
         local.insertPostIntoFavorites(postDM.toFavoritePostEntity())

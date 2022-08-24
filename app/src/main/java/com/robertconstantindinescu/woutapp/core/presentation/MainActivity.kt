@@ -1,6 +1,8 @@
 package com.robertconstantindinescu.woutapp.core.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import coil.ImageLoader
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.robertconstantindinescu.woutapp.LoginScreen
@@ -28,12 +31,16 @@ import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.BottomNavMenu
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.AuthScreen
 import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.BottomMenuScreen
+import com.robertconstantindinescu.woutapp.core.presentation.navigation.screen.OtherScreens
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.WoutAppTheme
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.register.SignUpScreen
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.CreatePostScreen
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.favorites.FavoriteScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.MainFeedScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.personal_screen.PersonalScreen
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.post_details.PostDetailsScreen
 import com.robertconstantindinescu.woutapp.feature_splash.presentation.SplashScreen
+import com.robertconstantindinescu.woutapp.feature_update_credentials.presentation.UpdateCredentialsScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     BottomMenuScreen.MainFeedScreen.route,
                     BottomMenuScreen.PersonalPostScreen.route,
                     BottomMenuScreen.FavoritesScreen.route,
+                    BottomMenuScreen.UpdateProfileScreen.route
                 )
 
                 Surface(
@@ -169,11 +177,34 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(route = BottomMenuScreen.MainFeedScreen.route) {
-                                MainFeedScreen(imageLoader = imageLoader)
+                                MainFeedScreen(imageLoader = imageLoader) { postId ->
+                                     navController.navigate(OtherScreens.PostDetailsScreen.route + "/${postId}")
+                                }
+                            }
+
+                            composable(
+                                route = OtherScreens.PostDetailsScreen.route + "/{postId}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "postId"
+                                    ){
+                                        type = NavType.StringType
+                                    }
+                                ),
+                                deepLinks = listOf(
+                                    navDeepLink {
+                                        action = Intent.ACTION_VIEW
+                                        uriPattern = "https://wout-app.com/{postId}"
+                                    }
+                                )
+                            ) {
+                                PostDetailsScreen(imageLoader = imageLoader)
                             }
 
                             composable(route = BottomMenuScreen.FavoritesScreen.route) {
-
+                                FavoriteScreen(imageLoader = imageLoader, scaffoldState = scaffoldState) { postId ->
+                                    navController.navigate(OtherScreens.PostDetailsScreen.route + "/${postId}")
+                                }
                             }
 
                             composable(route = BottomMenuScreen.CreatePostScreen.route) {
@@ -194,6 +225,10 @@ class MainActivity : ComponentActivity() {
 
                             composable(route = BottomMenuScreen.PersonalPostScreen.route) {
                                 PersonalScreen(imageLoader = imageLoader)
+                            }
+
+                            composable(route = BottomMenuScreen.UpdateProfileScreen.route) {
+                                UpdateCredentialsScreen(scaffoldState = scaffoldState)
                             }
 
                         }

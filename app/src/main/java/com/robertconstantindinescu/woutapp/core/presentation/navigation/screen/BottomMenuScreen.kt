@@ -6,8 +6,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.robertconstantindinescu.woutapp.core.util.CoreConstants.ACTIVITY
-import com.robertconstantindinescu.woutapp.core.util.CoreConstants.ACTIVITY_SCREEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.CREATE_POST
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.CREATE_POST_SCREEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.FAVORITES
@@ -16,6 +14,8 @@ import com.robertconstantindinescu.woutapp.core.util.CoreConstants.MAIN_FEED
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.MAIN_FEED_SCREEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.PERSONAL_POST
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.PERSONAL_POST_SCREEN
+import com.robertconstantindinescu.woutapp.core.util.CoreConstants.UPDATE_PROFILE
+import com.robertconstantindinescu.woutapp.core.util.CoreConstants.UPDATE_PROFILE_SCREEN
 
 sealed class BottomMenuScreen(val route: String, val icon: ImageVector? = null, val title: String) {
     object MainFeedScreen : BottomMenuScreen(
@@ -30,8 +30,8 @@ sealed class BottomMenuScreen(val route: String, val icon: ImageVector? = null, 
     object CreatePostScreen : BottomMenuScreen(
         route = CREATE_POST_SCREEN, icon = Icons.Default.Create, title = CREATE_POST
     )
-    object Activity : BottomMenuScreen(
-        route = ACTIVITY_SCREEN, icon = Icons.Default.Create, title = ACTIVITY
+    object UpdateProfileScreen : BottomMenuScreen(
+        route = UPDATE_PROFILE_SCREEN, icon = Icons.Default.Create, title = UPDATE_PROFILE
     )
 
     object Default : BottomMenuScreen(
