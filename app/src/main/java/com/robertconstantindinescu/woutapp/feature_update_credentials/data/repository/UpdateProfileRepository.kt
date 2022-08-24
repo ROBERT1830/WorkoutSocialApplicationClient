@@ -1,7 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_update_credentials.data.repository
 
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.data.response.ApiResponse
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiText
@@ -34,10 +33,10 @@ class UpdateProfileRepository(private val api: UpdateCredentialApi): UpdateProfi
         }
     }
 
-    override suspend fun updateUserCredentials(usernem: String, email: String): DefaultApiResource {
+    override suspend fun updateUserCredentials(username: String, email: String): DefaultApiResource {
         val response = callApi {
             api.updateUserCretentials(
-                UpdateCredentialDto(usernem, email)
+                UpdateCredentialDto(username, email)
             )
         }
 
