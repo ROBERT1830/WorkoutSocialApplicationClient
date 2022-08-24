@@ -6,17 +6,16 @@ import android.net.Uri
 import androidx.core.net.toFile
 import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.Resource
+import com.robertconstantindinescu.woutapp.core.util.*
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_USER_ID
-import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
-import com.robertconstantindinescu.woutapp.core.util.UiText
-import com.robertconstantindinescu.woutapp.core.util.callApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.mapper.toAuthModel
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthConstants.PROFILE_DATA
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthConstants.PROFILE_IMAGE
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
@@ -26,6 +25,7 @@ class AuthRepositoryImpl(
     private val gson: Gson
 ) : AuthRepository {
 
+    //Do not pass the object so that the repo function won't know where the data will go
     override suspend fun signUpUser(
         profileImage: Uri,
         name: String,
@@ -38,30 +38,24 @@ class AuthRepositoryImpl(
         val response = callApi {
             api.signUpUser(
                 profileData = MultipartBody.Part.createFormData(
-                    "profile_data",
-                    value = gson.toJson(SignUpRequestDto(
-                        name = name,
-                        email = email,
-                        password = password
-                    ))
+                    name = PROFILE_DATA,
+                    value = gson.toJson(
+                        SignUpRequestDto(
+                            name = name,
+                            email = email,
+                            password = password
+                        )
+                    )
                 ),
                 profileImage = MultipartBody.Part.createFormData(
-                    name = "profile_image",
+                    name = PROFILE_IMAGE,
                     filename = profileImageFile.name,
                     body = profileImageFile.asRequestBody()
                 )
             )
         }
-       return when(response.successful) {
-            true -> {
-                Resource.Success<Unit>()
-            }
-            false -> {
-                response.message?.let {
-                    Resource.Error(UiText.DynamicString(response.message))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+
+        return response.simpleApiResponseCheck()
     }
 
     override suspend fun signInUser(email: String, password: String): DefaultApiResource {
@@ -74,7 +68,7 @@ class AuthRepositoryImpl(
                 )
             )
         }
-        return when(response.successful) {
+        return when (response.successful) {
             true -> {
                 response.data?.toAuthModel().also {
                     sharedPreferences.edit()
@@ -89,26 +83,6 @@ class AuthRepositoryImpl(
                     Resource.Error(UiText.DynamicString(serverMsg))
                 } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
             }
-//            is Resource.Success -> {
-//                response.data?.toAuthModel().also {
-//                    sharedPreferences.edit()
-//                        .putString(KEY_JWT_TOKEN, it?.token)
-//                        .putString(KEY_USER_ID, it?.userId)
-//                        .apply()
-////                 Resource.Success(response.data?.toAuthModel().also {
-////                     sharedPreferences.edit()
-////                         .putString(KEY_JWT_TOKEN, it?.token)
-////                         .putString(KEY_USER_ID, it?.userId)
-////                         .apply()
-////                 })
-//                }
-//                Resource.Success<Unit>()
-//            }
-//            is Resource.Error -> {
-//                response.text.apply {
-//
-//                }
-//                Resource.Error(UiText.DynamicString(response.text))            }
         }
     }
 
@@ -117,17 +91,6 @@ class AuthRepositoryImpl(
         val response = callApi {
             api.authenticate()
         }
-        return when(response.successful) {
-            true -> {
-                Resource.Success<Unit>()
-            }
-            false -> {
-                response.message?.let {
-                    Resource.Error(UiText.DynamicString(response.message))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
-
-
+        return response.simpleApiResponseCheck()
     }
 }

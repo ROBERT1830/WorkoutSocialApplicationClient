@@ -116,7 +116,7 @@ fun LoginScreen(
                     modifier = Modifier.padding(
                         vertical = dimens.spaceSmall
                     ),
-                    text = passwordState.authStandardFieldState.text,
+                    text = passwordState.defaultFieldState.text,
                     hint = stringResource(id = R.string.user_password),
                     error = "",
                     keyboardType = KeyboardType.Password,

@@ -200,9 +200,9 @@ fun SignUpScreen(
                 modifier = Modifier.padding(
                     vertical = dimens.spaceSmall
                 ),
-                text = passwordState.authStandardFieldState.text,
+                text = passwordState.defaultFieldState.text,
                 hint = stringResource(id = R.string.signup_user_password),
-                error = when (passwordState.authStandardFieldState.error) {
+                error = when (passwordState.defaultFieldState.error) {
                     is AuthError.FieldEmpty -> {
                         stringResource(id = R.string.filed_no_empty)
                     }
@@ -242,7 +242,7 @@ fun SignUpScreen(
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.width(dimens.spaceMedium))
-                    if (viewModel.registerState.isLoading) {
+                    if (viewModel.loadingState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(30.dp),
                             color = MaterialTheme.colorScheme.onPrimary
