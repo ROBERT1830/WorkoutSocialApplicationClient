@@ -31,7 +31,7 @@ fun BottomNavMenu(
         BottomMenuScreen.PersonalPostScreen,
         BottomMenuScreen.Default,
         BottomMenuScreen.FavoritesScreen,
-        BottomMenuScreen.Activity,
+        BottomMenuScreen.UpdateProfileScreen,
     )
 
     BottomNavigation(

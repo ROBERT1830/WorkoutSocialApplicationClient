@@ -40,6 +40,7 @@ import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.personal_screen.PersonalScreen
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.post_details.PostDetailsScreen
 import com.robertconstantindinescu.woutapp.feature_splash.presentation.SplashScreen
+import com.robertconstantindinescu.woutapp.feature_update_credentials.presentation.UpdateCredentialsScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -65,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     BottomMenuScreen.MainFeedScreen.route,
                     BottomMenuScreen.PersonalPostScreen.route,
                     BottomMenuScreen.FavoritesScreen.route,
+                    BottomMenuScreen.UpdateProfileScreen.route
                 )
 
                 Surface(
@@ -223,6 +225,10 @@ class MainActivity : ComponentActivity() {
 
                             composable(route = BottomMenuScreen.PersonalPostScreen.route) {
                                 PersonalScreen(imageLoader = imageLoader)
+                            }
+
+                            composable(route = BottomMenuScreen.UpdateProfileScreen.route) {
+                                UpdateCredentialsScreen(scaffoldState = scaffoldState)
                             }
 
                         }

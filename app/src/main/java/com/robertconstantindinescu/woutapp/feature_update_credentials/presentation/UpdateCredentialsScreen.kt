@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +22,7 @@ import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.AuthError
 import kotlinx.coroutines.flow.collectLatest
 
-// TODO: Put in main
+
 
 @ExperimentalMaterial3Api
 @Composable
@@ -122,8 +123,8 @@ fun UpdateCredentialsScreen(
                         }
                         else -> ""
                     },
-                    keyboardType = KeyboardType.Email,
-                    leadingIcon = Icons.Default.Email,
+                    keyboardType = KeyboardType.Text,
+                    leadingIcon = Icons.Default.Person,
                     onValueChange = {
                         viewModel.onEvent(UpdateCredentialsEvent.OnEnterUserName(it))
                     }
@@ -137,7 +138,7 @@ fun UpdateCredentialsScreen(
                     .padding(horizontal = dimens.spaceExtraLarge),
             ) {
                 Text(
-                    text = stringResource(id = R.string.login_button_text),
+                    text = stringResource(id = R.string.update_credential_screen_update_button),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.bodyMedium
                 )

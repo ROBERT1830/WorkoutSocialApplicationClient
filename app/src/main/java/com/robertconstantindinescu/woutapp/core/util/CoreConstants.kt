@@ -18,8 +18,8 @@ object CoreConstants {
     const val CREATE_POST_SCREEN = "create_post_screen"
     const val CREATE_POST = "Create Post"
 
-    const val ACTIVITY_SCREEN = "activity_screen"
-    const val ACTIVITY = "Activity"
+    const val UPDATE_PROFILE_SCREEN = "update_profile_screen"
+    const val UPDATE_PROFILE = "Profile"
     //Other Screens
     const val POST_DETAILS_SCREEN = "post_details_screen"
 

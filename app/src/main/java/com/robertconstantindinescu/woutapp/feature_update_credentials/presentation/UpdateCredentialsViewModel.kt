@@ -15,9 +15,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class UpdateCredentialsViewModel(
+class UpdateCredentialsViewModel @Inject constructor(
     private val useCases: UpdateCredentialsUseCases
     ) : ViewModel() {
 
