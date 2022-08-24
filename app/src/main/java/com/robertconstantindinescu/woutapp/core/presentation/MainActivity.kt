@@ -156,7 +156,6 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(AuthScreen.SignupAuthScreen.route) {
                                 SignUpScreen(
-                                    scaffoldState = scaffoldState,
                                     onLoginNavigation = { email ->
                                         email?.let {
                                             navController.navigate(AuthScreen.LoginAuthScreen.route + "?email=$email")

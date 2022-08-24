@@ -31,7 +31,7 @@ class SignUpUseCase(
         }
 
         return UserDataValidation(
-            resultError = repository.signUpUser(profileImage!!, username, email, password)
+            result = repository.signUpUser(profileImage!!, username, email, password)
         )
     }
 }
