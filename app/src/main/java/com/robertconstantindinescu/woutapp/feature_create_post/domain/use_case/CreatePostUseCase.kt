@@ -5,10 +5,10 @@ import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiText
-import com.robertconstantindinescu.woutapp.feature_create_post.domain.repository.PostRepository
+import com.robertconstantindinescu.woutapp.feature_create_post.domain.repository.CreatePostRepository
 
 class CreatePostUseCase(
-    private val repository: PostRepository
+    private val repositoryCreate: CreatePostRepository
 ) {
     suspend operator fun invoke(
         sportType: String,
@@ -21,10 +21,10 @@ class CreatePostUseCase(
             return Resource.Error(UiText.StringResource(R.string.must_pick_image))
         }
 
-        if (description.trim().isBlank() || location.trim().isBlank()) {
+        if (description.isBlank() || location.isBlank()) {
             return Resource.Error(UiText.StringResource(R.string.filed_no_empty))
         }
 
-        return repository.createPost(sportType, description, location, imageUri)
+        return repositoryCreate.createPost(sportType, description, location, imageUri)
     }
 }

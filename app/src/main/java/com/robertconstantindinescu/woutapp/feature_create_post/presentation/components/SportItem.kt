@@ -5,10 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.DarkGreen10
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.DarkGreen80
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.Grey99
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
-import com.robertconstantindinescu.woutapp.feature_create_post.presentation.PostEvents
-import com.robertconstantindinescu.woutapp.feature_create_post.presentation.PostViewModel
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.model.Sport
 
 @Composable
@@ -56,7 +51,7 @@ fun SportItem(
             .fillMaxSize()
             .padding(dimens.spaceMedium)) {
             Text(
-                text = item.type.asString(context),
+                text = item.type.text,
                 style = MaterialTheme.typography.bodyMedium,
                 lineHeight = 26.sp, //space betwen text vertically
                 modifier = Modifier.align(Alignment.TopStart),
@@ -65,7 +60,7 @@ fun SportItem(
             )
             Icon(
                 painter = painterResource(id = item.drawableRes),
-                contentDescription = item.type.asString(context),
+                contentDescription = item.type.text,
                 tint = Grey99,
                 modifier = Modifier
                     .align(Alignment.BottomStart)

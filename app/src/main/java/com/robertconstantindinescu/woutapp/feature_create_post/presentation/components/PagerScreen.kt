@@ -13,7 +13,7 @@ import com.robertconstantindinescu.woutapp.feature_create_post.presentation.Post
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.model.CreatePostPage
 
 @Composable
-fun PagerScreen(createPostPage: CreatePostPage, viewModel: PostViewModel) {
+fun PagerScreen(createPostPage: CreatePostPage) {
 
     val dimens = LocalSpacing.current
     val context = LocalContext.current

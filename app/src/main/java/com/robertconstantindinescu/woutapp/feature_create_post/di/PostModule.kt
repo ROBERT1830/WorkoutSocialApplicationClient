@@ -1,11 +1,10 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.di
 
-import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.robertconstantindinescu.woutapp.feature_create_post.data.remote.PostApi
 import com.robertconstantindinescu.woutapp.feature_create_post.data.remote.PostApi.Companion.POST_BASE_URL
-import com.robertconstantindinescu.woutapp.feature_create_post.data.repository.PostRepositoryImpl
-import com.robertconstantindinescu.woutapp.feature_create_post.domain.repository.PostRepository
+import com.robertconstantindinescu.woutapp.feature_create_post.data.repository.CreatePostRepositoryImpl
+import com.robertconstantindinescu.woutapp.feature_create_post.domain.repository.CreatePostRepository
 import com.robertconstantindinescu.woutapp.feature_create_post.domain.use_case.CreatePostUseCase
 import com.robertconstantindinescu.woutapp.feature_create_post.domain.use_case.PostUseCases
 import dagger.Module
@@ -34,15 +33,15 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(api: PostApi, sharedPreferences: SharedPreferences, gson: Gson): PostRepository {
-        return PostRepositoryImpl(api = api, sharedPreferences = sharedPreferences, gson = gson)
+    fun providePostRepository(api: PostApi, gson: Gson): CreatePostRepository {
+        return CreatePostRepositoryImpl(api = api, gson = gson)
     }
 
     @Provides
     @Singleton
-    fun provideUeCases(repository: PostRepository): PostUseCases {
+    fun provideUeCases(repositoryCreate: CreatePostRepository): PostUseCases {
         return PostUseCases(
-            createPostUseCase = CreatePostUseCase(repository)
+            createPostUseCase = CreatePostUseCase(repositoryCreate)
         )
     }
 }

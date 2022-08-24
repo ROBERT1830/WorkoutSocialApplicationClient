@@ -43,6 +43,7 @@ class PostViewModel @Inject constructor(
     fun onEvent(event: PostEvents) {
         when (event) {
             is PostEvents.onSelectSportType -> {
+                //reset state to create only one selection effect
                 sportTypeState = SportTypeState()
                 sportTypeState = sportTypeState.copy(
                     sports = sportTypeState.sports.map {
@@ -74,12 +75,12 @@ class PostViewModel @Inject constructor(
                 postImageState = event.uri
             }
             is PostEvents.onCreatePostClick -> {
-                createPost(event.context)
+                createPost()
             }
         }
     }
 
-    private fun createPost(context: Context) {
+    private fun createPost() {
         viewModelScope.launch {
             isLoading = true
 
@@ -87,9 +88,9 @@ class PostViewModel @Inject constructor(
                 it.isSelected
             }?.type?.let {
                 useCases.createPostUseCase(
-                    sportType = it.asString(context),
-                    description = formsState.description,
-                    location = formsState.location,
+                    sportType = it.text,
+                    description = formsState.description.trim(),
+                    location = formsState.location.trim(),
                     imageUri = postImageState
                 )
             } ?:  kotlin.run {

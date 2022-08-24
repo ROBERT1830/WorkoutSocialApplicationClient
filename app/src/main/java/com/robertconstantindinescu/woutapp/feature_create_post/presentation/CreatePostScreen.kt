@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.collectLatest
 @ExperimentalPagerApi
 @Composable
 fun CreatePostScreen(
-    navHostController: NavHostController,
     viewModel: PostViewModel = hiltViewModel(),
     onShowSnackBar: (text: UiText) -> Unit = {},
     onNavigateUp: () -> Unit = {}
@@ -89,7 +88,7 @@ fun CreatePostScreen(
             verticalAlignment = Alignment.Top
         ) { positionPage ->
 
-            PagerScreen(createPostPage = pages[positionPage], viewModel)
+            PagerScreen(createPostPage = pages[positionPage])
         }
     }
 }

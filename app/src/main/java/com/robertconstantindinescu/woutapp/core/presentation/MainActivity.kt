@@ -208,7 +208,6 @@ class MainActivity : ComponentActivity() {
 
                             composable(route = BottomMenuScreen.CreatePostScreen.route) {
                                 CreatePostScreen(
-                                    navHostController =  navController,
                                     onShowSnackBar = { uiText ->
                                         lifecycleScope.launchWhenStarted {
                                             scaffoldState.snackbarHostState.showSnackbar(
