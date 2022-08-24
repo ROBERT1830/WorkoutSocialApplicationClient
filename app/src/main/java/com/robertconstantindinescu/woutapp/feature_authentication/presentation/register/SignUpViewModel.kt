@@ -119,7 +119,7 @@ class SignUpViewModel @Inject constructor(
                     passwordState.copy(defaultFieldState = DefaultFieldState(error = signUpResult.passwordError))
             }
 
-            when (signUpResult.resultError) {
+            when (signUpResult.result) {
                 is Resource.Success -> {
                     loadingState = loadingState.copy(
                         isLoading = false,
@@ -138,7 +138,7 @@ class SignUpViewModel @Inject constructor(
                     )
                     _uiEvent.send(
                         UiEvent.ShowSnackBar(
-                            signUpResult.resultError.text ?: UiText.unknownError()
+                            signUpResult.result.text ?: UiText.unknownError()
                         )
                     )
                 }

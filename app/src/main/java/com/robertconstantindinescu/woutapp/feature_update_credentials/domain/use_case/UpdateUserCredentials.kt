@@ -3,7 +3,6 @@ package com.robertconstantindinescu.woutapp.feature_update_credentials.domain.us
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.model.UserDataValidation
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.ValidationUtil
 import com.robertconstantindinescu.woutapp.feature_update_credentials.domain.repository.UpdateProfileRepository
-import com.robertconstantindinescu.woutapp.feature_update_credentials.domain.util.UpdateUserValidation
 
 class UpdateUserCredentials(private val repository: UpdateProfileRepository) {
 
@@ -19,7 +18,7 @@ class UpdateUserCredentials(private val repository: UpdateProfileRepository) {
             )
         }
         return UserDataValidation(
-            resultError = repository.updateUserCredentials(username.trim(), email.trim())
+            result = repository.updateUserCredentials(username.trim(), email.trim())
         )
     }
 

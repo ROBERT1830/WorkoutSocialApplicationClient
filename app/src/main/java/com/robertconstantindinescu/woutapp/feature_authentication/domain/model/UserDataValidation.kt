@@ -8,5 +8,5 @@ data class UserDataValidation(
     val usernameError: AuthError? = null,
     val emailError: AuthError? = null,
     val passwordError: AuthError? = null,
-    val resultError: DefaultApiResource? = null,
+    val result: DefaultApiResource? = null,
 )

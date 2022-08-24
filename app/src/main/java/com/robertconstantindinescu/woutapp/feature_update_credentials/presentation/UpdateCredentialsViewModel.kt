@@ -76,14 +76,14 @@ class UpdateCredentialsViewModel @Inject constructor(
                 emailState = emailState.copy(error = updateUserResult.emailError)
             }
 
-            when(updateUserResult.resultError) {
+            when(updateUserResult.result) {
                 is Resource.Success -> {
                     updateCredentialState = updateCredentialState.copy(isLoading = false)
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.user_credentials_updated)))
                 }
                 is Resource.Error -> {
                     updateCredentialState = updateCredentialState.copy(isLoading = false)
-                    _uiEvent.send(UiEvent.ShowSnackBar(updateUserResult.resultError.text ?: UiText.unknownError()))
+                    _uiEvent.send(UiEvent.ShowSnackBar(updateUserResult.result.text ?: UiText.unknownError()))
                 }
                 null ->updateCredentialState = updateCredentialState.copy(isLoading = false)
             }
