@@ -1,9 +1,10 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.repository
 
-import android.util.Log
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.*
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritePostEntity
+import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
+import com.robertconstantindinescu.woutapp.core.util.Resource
+import com.robertconstantindinescu.woutapp.core.util.UiText
+import com.robertconstantindinescu.woutapp.core.util.callApi
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritesPostDao
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.request.SubscribtionRequest
@@ -85,13 +86,9 @@ class PostRepositoryImpl(
     }
 
     override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
-        var mylist: List<FavoritePostEntity>? = null
-
         return  local.getAllFavoritesPosts(offset = page * offset).map {
             it.map { post -> post.toPostDM() }
         }
-        //return myFavposts
-
     }
 
     override suspend fun insertPostIntoFavorites(postDM: PostDM) {

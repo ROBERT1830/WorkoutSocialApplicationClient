@@ -10,14 +10,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -44,7 +42,6 @@ import kotlinx.coroutines.flow.collectLatest
 @ExperimentalMaterial3Api
 @Composable
 fun SignUpScreen(
-    scaffoldState: ScaffoldState,
     imageLoader: ImageLoader,
     onLoginNavigation: (email: String?) -> Unit = {},
     onShowSnackBar: (text: UiText) -> Unit = {},
@@ -85,6 +82,7 @@ fun SignUpScreen(
                     val params = uiEvent.params as? SignUpViewModel.Params
                     onLoginNavigation(params?.email)
                 }
+                else -> Unit
 
             }
 
@@ -200,9 +198,9 @@ fun SignUpScreen(
                 modifier = Modifier.padding(
                     vertical = dimens.spaceSmall
                 ),
-                text = passwordState.authStandardFieldState.text,
+                text = passwordState.defaultFieldState.text,
                 hint = stringResource(id = R.string.signup_user_password),
-                error = when (passwordState.authStandardFieldState.error) {
+                error = when (passwordState.defaultFieldState.error) {
                     is AuthError.FieldEmpty -> {
                         stringResource(id = R.string.filed_no_empty)
                     }
@@ -242,7 +240,7 @@ fun SignUpScreen(
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.width(dimens.spaceMedium))
-                    if (viewModel.registerState.isLoading) {
+                    if (viewModel.loadingState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(30.dp),
                             color = MaterialTheme.colorScheme.onPrimary

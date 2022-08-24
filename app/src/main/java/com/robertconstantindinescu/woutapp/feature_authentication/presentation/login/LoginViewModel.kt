@@ -11,8 +11,8 @@ import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
-import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthPasswordState
-import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthStandardFieldState
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.PasswordState
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.DefaultFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -25,9 +25,9 @@ class LoginViewModel @Inject constructor(
     private val useCases: AuthUseCases
 ) : ViewModel() {
 
-    var emailState by mutableStateOf(AuthStandardFieldState())
+    var emailState by mutableStateOf(DefaultFieldState())
         private set
-    var passwordState by mutableStateOf(AuthPasswordState(AuthStandardFieldState()))
+    var passwordState by mutableStateOf(PasswordState(DefaultFieldState()))
         private set
 
     var loginState by mutableStateOf(LoginState())
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
             }
             is LoginEvent.OnEnterPassword -> {
                 passwordState = passwordState.copy(
-                    authStandardFieldState = AuthStandardFieldState(text = event.password)
+                    defaultFieldState = DefaultFieldState(text = event.password)
                 )
             }
             is LoginEvent.OnPasswordToggleClick -> {
@@ -76,15 +76,15 @@ class LoginViewModel @Inject constructor(
 
             emailState = emailState.copy(error = null)
             passwordState = passwordState.copy(
-                authStandardFieldState = AuthStandardFieldState(
-                    text = passwordState.authStandardFieldState.text,
+                defaultFieldState = DefaultFieldState(
+                    text = passwordState.defaultFieldState.text,
                     error = null
                 )
             )
 
             val loginResult = useCases.signInUseCase(
                 email = emailState.text,
-                passsword = passwordState.authStandardFieldState.text
+                passsword = passwordState.defaultFieldState.text
             )
 
             if (loginResult.email != null) {
@@ -92,7 +92,7 @@ class LoginViewModel @Inject constructor(
             }
             if (loginResult.password != null) {
                 passwordState =
-                    passwordState.copy(authStandardFieldState = AuthStandardFieldState(error = loginResult.password))
+                    passwordState.copy(defaultFieldState = DefaultFieldState(error = loginResult.password))
             }
 
             when(loginResult.result) {
@@ -100,8 +100,8 @@ class LoginViewModel @Inject constructor(
                     loginState = loginState.copy(
                         isLoading = false
                     )
-                    emailState = AuthStandardFieldState()
-                    passwordState = AuthPasswordState(authStandardFieldState = AuthStandardFieldState())
+                    emailState = DefaultFieldState()
+                    passwordState = PasswordState(defaultFieldState = DefaultFieldState())
                     // TODO: emit message of succesflully login
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
                     _uiEvent.send(UiEvent.NavigateTo())
@@ -116,6 +116,7 @@ class LoginViewModel @Inject constructor(
 
 
                 }
+                else -> Unit
             }
 
 

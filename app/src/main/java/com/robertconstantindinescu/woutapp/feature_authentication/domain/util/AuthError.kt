@@ -5,5 +5,5 @@ sealed class AuthError {
     object FieldShort : AuthError()
     object InvalidEmail : AuthError()
     object InvalidPassword : AuthError()
-    object profileImageEmpty: AuthError()
+    object ProfileImageEmpty: AuthError()
 }

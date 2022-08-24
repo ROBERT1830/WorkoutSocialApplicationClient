@@ -1,7 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case
 
 import android.net.Uri
-import com.robertconstantindinescu.woutapp.feature_authentication.domain.model.SignUpUserValidation
+import com.robertconstantindinescu.woutapp.feature_authentication.domain.model.UserDataValidation
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.ValidationUtil
 
@@ -13,25 +13,25 @@ class SignUpUseCase(
         username: String,
         email: String,
         password: String
-    ): SignUpUserValidation {
+    ): UserDataValidation {
 
         val profileImageError = ValidationUtil.validateProfileImage(profileImage)
-        val usernameError =  ValidationUtil.validateUsername(username)
-        val emailError = ValidationUtil.validateEmail(email)
-        val passwordError = ValidationUtil.validatePassword(password)
+        val usernameError =  ValidationUtil.validateUsername(username.trim())
+        val emailError = ValidationUtil.validateEmail(email.trim())
+        val passwordError = ValidationUtil.validatePassword(password.trim())
 
-
+        //That way to check them all at once
         if (profileImageError != null || usernameError != null || emailError != null || passwordError != null) {
-            return SignUpUserValidation(
+            return UserDataValidation(
+                profileImageError = profileImageError,
                 usernameError = usernameError,
                 emailError = emailError,
                 passwordError = passwordError
             )
         }
 
-        return SignUpUserValidation(
-            resultError = repository.signUpUser(profileImage!! ,username.trim(), email.trim(), password.trim())
+        return UserDataValidation(
+            resultError = repository.signUpUser(profileImage!!, username, email, password)
         )
-
     }
 }

@@ -9,7 +9,7 @@ import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
-import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthStandardFieldState
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.DefaultFieldState
 import com.robertconstantindinescu.woutapp.feature_update_credentials.domain.use_case.UpdateCredentialsUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -23,10 +23,10 @@ class UpdateCredentialsViewModel @Inject constructor(
     ) : ViewModel() {
 
 
-    var usernameState by mutableStateOf(AuthStandardFieldState())
+    var usernameState by mutableStateOf(DefaultFieldState())
         private set
 
-    var emailState by mutableStateOf(AuthStandardFieldState())
+    var emailState by mutableStateOf(DefaultFieldState())
         private set
 
     var updateCredentialState by mutableStateOf(UpdateCredentialsState())
