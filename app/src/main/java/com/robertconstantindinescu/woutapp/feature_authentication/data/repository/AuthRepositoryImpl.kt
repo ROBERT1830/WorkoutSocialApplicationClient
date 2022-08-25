@@ -13,6 +13,7 @@ import com.robertconstantindinescu.woutapp.feature_authentication.data.mapper.to
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
+import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.response.AuthResponseDto
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.repository.AuthRepository
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthConstants.PROFILE_DATA
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthConstants.PROFILE_IMAGE
@@ -35,7 +36,7 @@ class AuthRepositoryImpl(
 
         val profileImageFile = profileImage.toFile()
 
-        val response = callApi {
+        return callApi {
             api.signUpUser(
                 profileData = MultipartBody.Part.createFormData(
                     name = PROFILE_DATA,
@@ -53,44 +54,50 @@ class AuthRepositoryImpl(
                     body = profileImageFile.asRequestBody()
                 )
             )
-        }
-
-        return response.simpleApiResponseCheck()
+        }.mapApiResponse { it }
     }
 
     override suspend fun signInUser(email: String, password: String): DefaultApiResource {
 
-        val response = callApi {
+        return callApi<AuthResponseDto> {
             api.signInUser(
                 LoginRequestDto(
                     email = email,
                     password = password
                 )
             )
-        }
-        return when (response.successful) {
-            true -> {
-                response.data?.toAuthModel().also {
-                    sharedPreferences.edit()
-                        .putString(KEY_JWT_TOKEN, it?.token)
-                        .putString(KEY_USER_ID, it?.userId)
-                        .apply()
-                }
-                Resource.Success<Unit>()
-            }
-            false -> {
-                response.message?.let { serverMsg ->
-                    Resource.Error(UiText.DynamicString(serverMsg))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+        }.mapApiResponse { response ->
+            response.toAuthModel().also {
+                sharedPreferences.edit()
+                    .putString(KEY_JWT_TOKEN, it.token)
+                    .putString(KEY_USER_ID, it.userId)
+                    .apply()
             }
         }
+
+//        return when (response.successful) {
+//            true -> {
+//                response.data?.toAuthModel().also {
+//                    sharedPreferences.edit()
+//                        .putString(KEY_JWT_TOKEN, it?.token)
+//                        .putString(KEY_USER_ID, it?.userId)
+//                        .apply()
+//                }
+//                Resource.Success<Unit>()
+//            }
+//            false -> {
+//                response.message?.let { serverMsg ->
+//                    Resource.Error(UiText.DynamicString(serverMsg))
+//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+//            }
+//        }
     }
 
     override suspend fun authenticate(): DefaultApiResource {
 
-        val response = callApi {
+        return callApi {
             api.authenticate()
-        }
-        return response.simpleApiResponseCheck()
+        }.mapApiResponse { it }
+        //return response.mapApiResponse { it }
     }
 }

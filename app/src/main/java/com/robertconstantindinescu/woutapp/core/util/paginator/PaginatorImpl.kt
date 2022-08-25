@@ -22,20 +22,31 @@ class PaginatorImpl<Key, Item>(
     override suspend fun loadNextPosts() {
         //if (resetPaginator) { page = 0}
         onLoad(true)
-        when (val result = onRequest(currentPage)) {
-            is Resource.Success -> {
+
+        onRequest(currentPage).mapResourceData(
+            success = { newDataList ->
                 //if no data cames then means that we reached the end of the list and an emptyList will
                 //be sent
-                onSuccess(result.data ?: emptyList(), currentPage)
+                onSuccess(newDataList ?: emptyList(), currentPage)
                 currentPage = getNextKey()
 
                 onLoad(false)
-            }
-            is Resource.Error -> {
-                onError(result.text ?: UiText.unknownError())
+            },
+            error = { text, _ ->
+                onError(text ?: UiText.unknownError())
                 onLoad(false)
             }
-        }
+        )
+
+//        when (val result = onRequest(currentPage)) {
+//            is Resource.Success -> {
+//
+//            }
+//            is Resource.Error -> {
+//                onError(result.text ?: UiText.unknownError())
+//                onLoad(false)
+//            }
+//        }
     }
 
     override fun reset() {

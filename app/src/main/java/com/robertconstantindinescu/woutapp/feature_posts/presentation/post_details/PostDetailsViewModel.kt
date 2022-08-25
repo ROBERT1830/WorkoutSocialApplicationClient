@@ -42,21 +42,36 @@ class PostDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(isLoading = true)
 
-            when(val result = useCases.getPostDetailsUseCase(postId)) {
-                is Resource.Success -> {
+            useCases.getPostDetailsUseCase(postId).mapResourceData(
+                success = { post ->
                     state = state.copy(
                         isLoading = false,
-                        post = result.data?.toPostVO()
+                        post = post?.toPostVO()
                     )
-                }
-                is Resource.Error -> {
+                },
+                error = { text, _ ->
                     state = state.copy(
                         isLoading = false,
                     )
-                    _uiEvent.send(UiEvent.ShowSnackBar(result.text ?: UiText.unknownError()))
+                    _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                 }
+            )
 
-            }
+//            when(val result = useCases.getPostDetailsUseCase(postId)) {
+//                is Resource.Success -> {
+//                    state = state.copy(
+//                        isLoading = false,
+//                        post = result.data?.toPostVO()
+//                    )
+//                }
+//                is Resource.Error -> {
+//                    state = state.copy(
+//                        isLoading = false,
+//                    )
+//                    _uiEvent.send(UiEvent.ShowSnackBar(result.text ?: UiText.unknownError()))
+//                }
+//
+//            }
         }
     }
 }

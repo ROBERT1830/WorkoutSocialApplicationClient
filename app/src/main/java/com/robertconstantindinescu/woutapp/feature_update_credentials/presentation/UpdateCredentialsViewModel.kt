@@ -76,36 +76,61 @@ class UpdateCredentialsViewModel @Inject constructor(
                 emailState = emailState.copy(error = updateUserResult.emailError)
             }
 
-            when(updateUserResult.result) {
-                is Resource.Success -> {
+            updateUserResult.result?.mapResourceData(
+                success = {
                     updateCredentialState = updateCredentialState.copy(isLoading = false)
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.user_credentials_updated)))
-                }
-                is Resource.Error -> {
+                },
+                error = { text, _ ->
                     updateCredentialState = updateCredentialState.copy(isLoading = false)
-                    _uiEvent.send(UiEvent.ShowSnackBar(updateUserResult.result.text ?: UiText.unknownError()))
+                    _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                 }
-                null ->updateCredentialState = updateCredentialState.copy(isLoading = false)
-            }
+            ) ?: kotlin.run { updateCredentialState = updateCredentialState.copy(isLoading = false) }
+
+//            when(updateUserResult.result) {
+//                is Resource.Success -> {
+//                    updateCredentialState = updateCredentialState.copy(isLoading = false)
+//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.user_credentials_updated)))
+//                }
+//                is Resource.Error -> {
+//                    updateCredentialState = updateCredentialState.copy(isLoading = false)
+//                    _uiEvent.send(UiEvent.ShowSnackBar(updateUserResult.result.text ?: UiText.unknownError()))
+//                }
+//                null ->updateCredentialState = updateCredentialState.copy(isLoading = false)
+//            }
         }
     }
 
     private fun loadUserCredentials() {
         viewModelScope.launch {
-            when (val response = useCases.getUserCredentialsUseCase()) {
-                is Resource.Success -> {
+            useCases.getUserCredentialsUseCase().mapResourceData(
+                success = { user ->
                     usernameState = usernameState.copy(
-                        text = response.data?.name ?: ""
+                        text = user?.name ?: ""
                     )
                     emailState = emailState.copy(
-                        text = response.data?.email ?: ""
+                        text = user?.email ?: ""
                     )
-                }
-                is Resource.Error -> {
-                    _uiEvent.send(UiEvent.ShowSnackBar(response.text ?: UiText.unknownError()))
+                },
+                error = { text, _ ->
+                    _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                     return@launch
                 }
-            }
+            )
+//            when (val response = useCases.getUserCredentialsUseCase()) {
+//                is Resource.Success -> {
+//                    usernameState = usernameState.copy(
+//                        text = response.data?.name ?: ""
+//                    )
+//                    emailState = emailState.copy(
+//                        text = response.data?.email ?: ""
+//                    )
+//                }
+//                is Resource.Error -> {
+//                    _uiEvent.send(UiEvent.ShowSnackBar(response.text ?: UiText.unknownError()))
+//                    return@launch
+//                }
+//            }
         }
     }
 }

@@ -35,15 +35,3 @@ inline fun <T> callApi(call: () -> Response<T>): ApiResponse<T> {
     }
 }
 
-fun <T> ApiResponse<T>.simpleApiResponseCheck(): DefaultApiResource {
-    return when (this.successful) {
-        true -> {
-            Resource.Success<Unit>()
-        }
-        false -> {
-            this.message?.let {
-                Resource.Error(UiText.DynamicString(this.message))
-            } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-        }
-    }
-}

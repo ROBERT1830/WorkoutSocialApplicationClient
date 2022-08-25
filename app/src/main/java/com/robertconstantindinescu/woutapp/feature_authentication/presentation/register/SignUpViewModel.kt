@@ -119,8 +119,8 @@ class SignUpViewModel @Inject constructor(
                     passwordState.copy(defaultFieldState = DefaultFieldState(error = signUpResult.passwordError))
             }
 
-            when (signUpResult.result) {
-                is Resource.Success -> {
+            signUpResult.result?.mapResourceData(
+                success = {
                     loadingState = loadingState.copy(
                         isLoading = false,
                     )
@@ -131,20 +131,39 @@ class SignUpViewModel @Inject constructor(
                     usernameState = DefaultFieldState()
                     emailState = DefaultFieldState()
                     passwordState = PasswordState(DefaultFieldState())
+                },
+                error = { text, _ ->
+                    loadingState = loadingState.copy(isLoading = false)
+                    _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                 }
-                is Resource.Error -> {
-                    loadingState = loadingState.copy(
-                        isLoading = false
-                    )
-                    _uiEvent.send(
-                        UiEvent.ShowSnackBar(
-                            signUpResult.result.text ?: UiText.unknownError()
-                        )
-                    )
-                }
-                //If happen field error, result is null
-                null -> loadingState = loadingState.copy(isLoading = false)
-            }
+            ) ?: kotlin.run { loadingState = loadingState.copy(isLoading = false) }
+
+//            when (signUpResult.result) {
+//                is Resource.Success -> {
+//                    loadingState = loadingState.copy(
+//                        isLoading = false,
+//                    )
+//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.sign_up_user_register_success)))
+//                    _uiEvent.send(UiEvent.NavigateUp(Params(email = emailState.text)))
+//
+//                    //Clear all errors by generating a new instance of field states
+//                    usernameState = DefaultFieldState()
+//                    emailState = DefaultFieldState()
+//                    passwordState = PasswordState(DefaultFieldState())
+//                }
+//                is Resource.Error -> {
+//                    loadingState = loadingState.copy(
+//                        isLoading = false
+//                    )
+//                    _uiEvent.send(
+//                        UiEvent.ShowSnackBar(
+//                            signUpResult.result.text ?: UiText.unknownError()
+//                        )
+//                    )
+//                }
+//                //If happen field error, result is null
+//                null -> loadingState = loadingState.copy(isLoading = false)
+//            }
         }
 
     }
