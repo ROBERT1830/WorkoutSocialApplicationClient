@@ -74,7 +74,7 @@ class PaginatorImpl2<Key, Item>(
                 onSuccess(it, currentPage)
                 currentPage = getNextKey()
                 onLoad(false)
-            }
+            } else onLoad(false)
         })
     }
 

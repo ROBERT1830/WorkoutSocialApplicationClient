@@ -25,10 +25,13 @@ fun CreatePostButton(
     onCreatePostClick: () -> Unit = {}
 ) {
     val dimens = LocalSpacing.current
+    Spacer(modifier = Modifier.height(dimens.spaceLarge))
     Row(
-        modifier = modifier.fillMaxWidth().padding(horizontal = dimens.spaceMedium),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.End
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = dimens.spaceMedium),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Center
     ) {
         AnimatedVisibility(
             visible = pagerState.currentPage == 1

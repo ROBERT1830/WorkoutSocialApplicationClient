@@ -69,5 +69,4 @@ class PersonalScreenViewModel @Inject constructor(
             paginator.loadNextPosts()
         }
     }
-
 }

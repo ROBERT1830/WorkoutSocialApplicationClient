@@ -28,10 +28,10 @@ import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpaci
 @Composable
 fun ActionRow(
     modifier: Modifier,
-    excludeFavorite: Boolean = false,
-    excludeShare: Boolean = false,
-    excludeSubscribe: Boolean = false,
-    excludeDelete: Boolean = false,
+    favoriteEnabled: Boolean = false,
+    shareEnabled: Boolean = false,
+    subscribeEnabled: Boolean = false,
+    deleteEnabled: Boolean = false,
     isAddedToFavorites: Boolean = false,
     isUserSubscribed: Boolean = false,
     iconSize: Dp = 40.dp,
@@ -46,7 +46,7 @@ fun ActionRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (excludeFavorite) {
+        if (favoriteEnabled) {
             IconButton(
                 modifier = Modifier
                     .clip(RoundedCornerShape(dimens.spaceMedium))
@@ -69,25 +69,26 @@ fun ActionRow(
             Spacer(modifier = Modifier.width(dimens.spaceSmall))
         }
 
-
-        IconButton(
-            modifier = Modifier
-                .clip(RoundedCornerShape(dimens.spaceMedium))
-                .size(iconSize),
-            onClick = { onShareClick() }
-        ) {
-            Icon(
+        if (shareEnabled) {
+            IconButton(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(dimens.spaceSmall),
-                imageVector = Icons.Filled.Share,
-                contentDescription = stringResource(id = R.string.share_post)
-            )
+                    .clip(RoundedCornerShape(dimens.spaceMedium))
+                    .size(iconSize),
+                onClick = { onShareClick() }
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(dimens.spaceSmall),
+                    imageVector = Icons.Filled.Share,
+                    contentDescription = stringResource(id = R.string.share_post)
+                )
+            }
         }
+
         Spacer(modifier = Modifier.width(dimens.spaceSmall))
 
-
-        if (excludeSubscribe) {
+        if (subscribeEnabled) {
             Text(
                 text = stringResource(id = R.string.main_feed_subscribe_event),
                 style = MaterialTheme.typography.bodyMedium,
@@ -108,7 +109,7 @@ fun ActionRow(
             )
         }
 
-        if (excludeDelete) {
+        if (deleteEnabled) {
             IconButton(
                 modifier = Modifier
                     .clip(RoundedCornerShape(dimens.spaceMedium))

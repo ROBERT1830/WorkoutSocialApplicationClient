@@ -35,11 +35,14 @@ fun Post(
     post: PostVO,
     imageLoader: ImageLoader,
     deleteEnabled: Boolean = false,
+    shareEnabled: Boolean = false,
+    favoritesEnabled: Boolean = false,
+    subscribeEnabled: Boolean = false,
     onFavoritesClick: () -> Unit = {},
     onShareClick: (postId: String) -> Unit = {},
     onSubscribeClick: () -> Unit = {},
     onDetailNavigate: (postId: String) -> Unit = {},
-    onDeleteFavoritePost: (post: PostVO) -> Unit ={}
+    onDeletePost: (post: PostVO) -> Unit ={}
 ) {
     val dimens = LocalSpacing.current
     Column(
@@ -156,10 +159,10 @@ fun Post(
                     .padding(vertical = dimens.spaceMedium, horizontal = dimens.spaceSmall),
                 isAddedToFavorites = post.isAddedToFavorites ?: false,
                 isUserSubscribed = post.isUserSubscribed ?: false,
-                excludeFavorite = post.isAddedToFavorites != null,
-                excludeSubscribe = post.isUserSubscribed != null,
-                excludeShare = false,
-                excludeDelete = deleteEnabled,
+                favoriteEnabled = favoritesEnabled, //post.isAddedToFavorites != null,
+                subscribeEnabled = subscribeEnabled,
+                deleteEnabled = deleteEnabled,
+                shareEnabled = shareEnabled,
                 onFavoritesClick = {
                     onFavoritesClick()
                 },
@@ -170,7 +173,7 @@ fun Post(
                     onShareClick(post.postId)
                 },
                 onDeletePost = {
-                    onDeleteFavoritePost(post)
+                    onDeletePost(post)
                 }
             )
         }

@@ -72,4 +72,5 @@
     <string name="user_credentials_updated">User credentials have been updated!</string>
     <string name="update_credential_screen_title">Update your basic credentials!</string>
     <string name="update_credential_screen_update_button">Update</string>
+    <string name="no_data_available">No posts yet...</string>
 </resources>

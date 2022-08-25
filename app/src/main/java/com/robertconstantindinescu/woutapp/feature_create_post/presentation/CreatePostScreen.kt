@@ -68,7 +68,7 @@ fun CreatePostScreen(
 
         HorizontalPagerIndicator(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.5f)
                 .align(Alignment.CenterHorizontally),
             pagerState = pagerState,
             activeColor = MaterialTheme.colorScheme.primary,
@@ -77,7 +77,7 @@ fun CreatePostScreen(
             spacing = PAGING_INDICATOR_WIDTH
         )
         
-        CreatePostButton(modifier = Modifier.weight(1f), pagerState = pagerState) {
+        CreatePostButton(modifier = Modifier.weight(0.5f), pagerState = pagerState) {
             viewModel.onEvent(PostEvents.onCreatePostClick(context))
         }
 
