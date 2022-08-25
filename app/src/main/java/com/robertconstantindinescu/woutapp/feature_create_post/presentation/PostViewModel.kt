@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.presentation
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_create_post.domain.use_case.PostUseCases
@@ -84,7 +82,7 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading = true
 
-            val result = sportTypeState.sports.firstOrNull {
+            sportTypeState.sports.firstOrNull {
                 it.isSelected
             }?.type?.let {
                 useCases.createPostUseCase(
@@ -93,26 +91,40 @@ class PostViewModel @Inject constructor(
                     location = formsState.location.trim(),
                     imageUri = postImageState
                 )
-            } ?:  kotlin.run {
-                _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.must_select_sport)))
-                return@launch
-            }
-
-            when(result) {
-                is Resource.Success -> {
+            }?.mapResourceData(
+                success = {
                     postImageState = null
                     formsState = FormsState()
                     sportTypeState = SportTypeState()
                     isLoading = false
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.post_created)))
                     _uiEvent.send(UiEvent.NavigateUp(null))
-
-                }
-                is Resource.Error -> {
+                },
+                error = { text, data ->
                     isLoading = false
-                    _uiEvent.send(UiEvent.ShowSnackBar(result.text ?: UiText.unknownError()))
+                    _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                 }
+            ) ?:  kotlin.run {
+                _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.must_select_sport)))
+                return@launch
             }
+
+
+//            when(result) {
+//                is Resource.Success -> {
+//                    postImageState = null
+//                    formsState = FormsState()
+//                    sportTypeState = SportTypeState()
+//                    isLoading = false
+//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.post_created)))
+//                    _uiEvent.send(UiEvent.NavigateUp(null))
+//
+//                }
+//                is Resource.Error -> {
+//                    isLoading = false
+//                    _uiEvent.send(UiEvent.ShowSnackBar(result.text ?: UiText.unknownError()))
+//                }
+//            }
         }
     }
 

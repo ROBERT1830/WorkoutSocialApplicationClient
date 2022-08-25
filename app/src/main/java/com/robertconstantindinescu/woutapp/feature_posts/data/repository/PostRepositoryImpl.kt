@@ -22,67 +22,54 @@ class PostRepositoryImpl(
     /*ownUserId: String, from token server side*/
     override suspend fun getAllPosts(page: Int, pageSize: Int): Resource<List<PostDM>> {
 
-        val response = callApi {
+        return callApi {
             api.getAllPosts(page, pageSize)
+        }.mapApiResponse { posts ->
+            posts.map { it.toPostDM() }
         }
 
-        return when(response.successful) {
-            true -> {
-                if (response.data?.isNotEmpty() == true) {
-                    Resource.Success(response.data.map { postDto ->
-                        postDto.toPostDM()
-                    })
-                }else Resource.Success(emptyList<PostDM>())
-            }
-            false -> {
-                response.message?.let {
-                    Resource.Error(UiText.DynamicString(response.message))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+//        return when(response.successful) {
+//            true -> {
+//                if (response.data?.isNotEmpty() == true) {
+//                    Resource.Success(response.data.map { postDto ->
+//                        postDto.toPostDM()
+//                    })
+//                }else Resource.Success(emptyList<PostDM>())
+//            }
+//            false -> {
+//                response.message?.let {
+//                    Resource.Error(UiText.DynamicString(response.message))
+//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+//            }
+//        }
     }
 
     override suspend fun getAllCurrentUserPosts(
         page: Int,
         pageSize: Int
     ): Resource<List<PostDM>> {
-        val response = callApi {
+        return callApi {
             api.getAllCurrentUserPosts(page, pageSize)
-        }
-
-        return when(response.successful) {
-            true -> {
-                if (response.data?.isNotEmpty() == true) {
-                    Resource.Success(response.data.map { postDto ->
-                        postDto.toPostDM()
-                    })
-                }else Resource.Success(emptyList<PostDM>())
-            }
-            false -> {
-                response.message?.let {
-                    Resource.Error(UiText.DynamicString(response.message))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+        }.mapApiResponse { posts -> posts.map { it.toPostDM() } }
     }
 
     override suspend fun getPostDetails(postId: String): Resource<PostDM> {
-        val response = callApi {
+        return callApi {
             api.getPostDetails(postId)
-        }
+        }.mapApiResponse { post -> post.toPostDM() }
 
-        return when(response.successful) {
-            true -> {
-                response.data.let {
-                    Resource.Success(it?.data?.toPostDM())
-                }
-            }
-            false -> {
-                response.message?.let {
-                    Resource.Error(UiText.DynamicString(response.message))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+//        return when(response.successful) {
+//            true -> {
+//                response.data.let {
+//                    Resource.Success(it?.data?.toPostDM())
+//                }
+//            }
+//            false -> {
+//                response.message?.let {
+//                    Resource.Error(UiText.DynamicString(response.message))
+//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+//            }
+//        }
     }
 
     override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
@@ -100,36 +87,36 @@ class PostRepositoryImpl(
     }
 
     override suspend fun subscribeUser(postId: String): DefaultApiResource {
-        val response = callApi {
+        return callApi {
             api.subscribeUser(SubscribtionRequest(postId = postId))
-        }
+        }.mapApiResponse { it }
 
-        return when(response.successful) {
-            true -> {
-                Resource.Success<Unit>()
-            }
-            false -> {
-                response.message?.let { serverMsg ->
-                    Resource.Error(UiText.DynamicString(serverMsg))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+//        return when(response.successful) {
+//            true -> {
+//                Resource.Success<Unit>()
+//            }
+//            false -> {
+//                response.message?.let { serverMsg ->
+//                    Resource.Error(UiText.DynamicString(serverMsg))
+//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+//            }
+//        }
     }
 
     override suspend fun unsubscribeUser(postId: String): DefaultApiResource {
-        val response = callApi {
+        return callApi {
             api.unsubscribeUser(SubscribtionRequest(postId = postId))
-        }
+        }.mapApiResponse { it }
 
-        return when(response.successful) {
-            true -> {
-                Resource.Success<Unit>()
-            }
-            false -> {
-                response.message?.let { serverMsg ->
-                    Resource.Error(UiText.DynamicString(serverMsg))
-                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-            }
-        }
+//        return when(response.successful) {
+//            true -> {
+//                Resource.Success<Unit>()
+//            }
+//            false -> {
+//                response.message?.let { serverMsg ->
+//                    Resource.Error(UiText.DynamicString(serverMsg))
+//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+//            }
+//        }
     }
 }

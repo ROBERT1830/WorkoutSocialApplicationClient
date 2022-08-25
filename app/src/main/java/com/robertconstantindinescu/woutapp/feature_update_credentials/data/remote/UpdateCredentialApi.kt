@@ -11,7 +11,7 @@ import retrofit2.http.Query
 
 interface UpdateCredentialApi {
     @GET("/api/user/credentials")
-    suspend fun getUserCredentials(): Response<ApiResponse<UpdateCredentialDto>>
+    suspend fun getUserCredentials(): Response<UpdateCredentialDto>
 
     @POST("/api/user/update")
     suspend fun updateUserCretentials(

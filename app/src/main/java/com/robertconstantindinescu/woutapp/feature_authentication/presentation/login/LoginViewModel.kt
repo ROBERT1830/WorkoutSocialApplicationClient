@@ -97,8 +97,8 @@ class LoginViewModel @Inject constructor(
                     passwordState.copy(defaultFieldState = DefaultFieldState(error = loginResult.passwordError))
             }
 
-            when(loginResult.result) {
-                is Resource.Success -> {
+            loginResult.result?.mapResourceData(
+                success = {
                     loginState = loginState.copy(
                         isLoading = false
                     )
@@ -108,17 +108,37 @@ class LoginViewModel @Inject constructor(
 
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
                     _uiEvent.send(UiEvent.NavigateTo())
-                }
-                is Resource.Error -> {
-                    loginState = loginState.copy(
-                        isLoading = false
-                    )
+                },
+                error = { text, _ ->
+                    loginState = loginState.copy(isLoading = false)
                     _uiEvent.send(
-                        UiEvent.ShowSnackBar(loginResult.result.text ?: UiText.unknownError())
+                        UiEvent.ShowSnackBar(text ?: UiText.unknownError())
                     )
                 }
-                else -> Unit
-            }
+            )
+
+//            when(loginResult.result) {
+//                is Resource.Success -> {
+//                    loginState = loginState.copy(
+//                        isLoading = false
+//                    )
+//                    //reset fields
+//                    emailState = DefaultFieldState()
+//                    passwordState = PasswordState(defaultFieldState = DefaultFieldState())
+//
+//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
+//                    _uiEvent.send(UiEvent.NavigateTo())
+//                }
+//                is Resource.Error -> {
+//                    loginState = loginState.copy(
+//                        isLoading = false
+//                    )
+//                    _uiEvent.send(
+//                        UiEvent.ShowSnackBar(loginResult.result.text ?: UiText.unknownError())
+//                    )
+//                }
+//                else -> Unit
+//            }
 
 
         }

@@ -36,7 +36,7 @@ interface PostApi {
     @GET("/api/post/details")
     suspend fun getPostDetails(
         @Query("postId") postId: String
-    ):Response<ApiResponse<PostDto>>
+    ):Response<PostDto>
 
     companion object {
         const val MAIN_FEED_BASE_URL = "http://10.0.2.2:8001/"

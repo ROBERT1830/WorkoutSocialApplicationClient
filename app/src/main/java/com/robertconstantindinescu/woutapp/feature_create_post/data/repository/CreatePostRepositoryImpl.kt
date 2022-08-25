@@ -18,7 +18,7 @@ class CreatePostRepositoryImpl(
     override suspend fun createPost(sportType: String, description: String, location: String, imageUri: Uri): DefaultApiResource {
         val imageFile = imageUri.toFile()
 
-        val response = callApi {
+        return callApi {
             api.createPost(
                 postData = MultipartBody.Part.createFormData(
                     "post_data",
@@ -34,8 +34,8 @@ class CreatePostRepositoryImpl(
                     body = imageFile.asRequestBody()
                 )
             )
-        }
+        }.mapApiResponse { it }
 
-        return response.simpleApiResponseCheck()
+
     }
 }
