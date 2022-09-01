@@ -4,12 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
-import com.robertconstantindinescu.woutapp.feature_create_post.presentation.PostViewModel
 import com.robertconstantindinescu.woutapp.feature_create_post.presentation.model.CreatePostPage
 
 @Composable

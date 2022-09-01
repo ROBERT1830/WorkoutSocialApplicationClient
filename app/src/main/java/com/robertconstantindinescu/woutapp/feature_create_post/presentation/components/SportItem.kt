@@ -34,7 +34,6 @@ fun SportItem(
     onSelectClick: () -> Unit = {}
 ) {
 
-    val context = LocalContext.current
     val dimens = LocalSpacing.current
 
 

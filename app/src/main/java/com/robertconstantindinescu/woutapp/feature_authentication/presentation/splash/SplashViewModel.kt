@@ -20,10 +20,7 @@ class SplashViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvent<InitNavigationTo>>()
     val uiEvent = _uiEvent.receiveAsFlow()
-//    enum class InitNavigation {
-//        MAIN_FEED_SCREEN,
-//        LOGIN_SCREEN
-//    }
+
 
     sealed class InitNavigationTo(val route: String) {
         object LoginScreen: InitNavigationTo(AuthScreen.LoginAuthScreen.route)

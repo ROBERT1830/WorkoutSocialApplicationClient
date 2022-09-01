@@ -86,18 +86,6 @@ class UpdateCredentialsViewModel @Inject constructor(
                     _uiEvent.send(UiEvent.ShowSnackBar(text ?: UiText.unknownError()))
                 }
             ) ?: kotlin.run { updateCredentialState = updateCredentialState.copy(isLoading = false) }
-
-//            when(updateUserResult.result) {
-//                is Resource.Success -> {
-//                    updateCredentialState = updateCredentialState.copy(isLoading = false)
-//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.user_credentials_updated)))
-//                }
-//                is Resource.Error -> {
-//                    updateCredentialState = updateCredentialState.copy(isLoading = false)
-//                    _uiEvent.send(UiEvent.ShowSnackBar(updateUserResult.result.text ?: UiText.unknownError()))
-//                }
-//                null ->updateCredentialState = updateCredentialState.copy(isLoading = false)
-//            }
         }
     }
 

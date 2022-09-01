@@ -1,8 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities
 
-import androidx.paging.PagingSource
 import androidx.room.*
-import com.robertconstantindinescu.woutapp.core.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 @Dao

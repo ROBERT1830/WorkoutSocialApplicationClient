@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.robertconstantindinescu.woutapp.feature_posts.data.util.Constants.FAVORITE_POST_TABLE

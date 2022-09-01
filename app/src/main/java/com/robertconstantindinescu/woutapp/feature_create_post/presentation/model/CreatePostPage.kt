@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.presentation.model
 
-import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

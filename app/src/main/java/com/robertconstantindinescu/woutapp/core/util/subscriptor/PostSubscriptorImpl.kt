@@ -1,12 +1,10 @@
 package com.robertconstantindinescu.woutapp.core.util.subscriptor
 
-import android.util.Log
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
-import com.robertconstantindinescu.woutapp.core.util.Resource
-import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model.PostVO
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.model.PostVO
 
 class PostSubscriptorImpl: PostSubscriptor {
-    override suspend fun togglePostSubscriptor(
+    override suspend fun togglePostSubscripton(
         posts: List<PostVO>,
         postId: String,
         onRequest: suspend (isUserSubscribed: Boolean) -> DefaultApiResource,
@@ -28,9 +26,9 @@ class PostSubscriptorImpl: PostSubscriptor {
                 }else post
             }
         )
-        when (onRequest(currentlySubscribed)) {
-            is Resource.Success -> Unit
-            is Resource.Error -> {
+        onRequest(currentlySubscribed).mapResourceData(
+            success = { it },
+            error = { _, _ ->
                 onStateUpdate(
                     posts.map { post ->
                         if (post.postId == postId) {
@@ -42,6 +40,40 @@ class PostSubscriptorImpl: PostSubscriptor {
                     }
                 )
             }
-        }
+        )
+    }
+
+    override suspend fun togglePostFavorites(
+        posts: List<PostVO>,
+        postId: String,
+        onRequest: suspend (isPostFavorite: Boolean) -> DefaultApiResource,
+        onStateUpdate: (List<PostVO>) -> Unit
+    ) {
+        val currentPost = posts.find { it.postId == postId }
+        val isPostFavorite = currentPost?.isAddedToFavorites == true
+
+        onStateUpdate(
+            posts.map { post ->
+                if (post.postId == postId) {
+                    post.copy(
+                        isAddedToFavorites = !post.isAddedToFavorites!!
+                    )
+                }else post
+            }
+        )
+        onRequest(isPostFavorite).mapResourceData(
+            success = { it },
+            error = { _, _ ->
+                onStateUpdate(
+                    posts.map { post ->
+                        if (post.postId == postId) {
+                            post.copy(
+                                isAddedToFavorites = isPostFavorite
+                            )
+                        } else post
+                    }
+                )
+            }
+        )
     }
 }

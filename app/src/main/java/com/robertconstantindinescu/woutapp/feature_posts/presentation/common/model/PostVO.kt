@@ -1,4 +1,4 @@
-package com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model
+package com.robertconstantindinescu.woutapp.feature_posts.presentation.common.model
 
 data class PostVO(
     val postId: String,
@@ -10,6 +10,6 @@ data class PostVO(
     val description: String?,
     val location: String?,
     val subscriptionsCount: Long? = 0,
-    val isAddedToFavorites : Boolean?,
+    val isAddedToFavorites : Boolean? = false,
     val isUserSubscribed: Boolean?
 )

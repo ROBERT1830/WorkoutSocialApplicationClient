@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.core.net.toFile
 import com.google.gson.Gson
-import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.*
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_JWT_TOKEN
 import com.robertconstantindinescu.woutapp.core.util.CoreConstants.KEY_USER_ID
+import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
+import com.robertconstantindinescu.woutapp.core.util.callApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.mapper.toAuthModel
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.AuthApi
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
@@ -74,23 +74,6 @@ class AuthRepositoryImpl(
                     .apply()
             }
         }
-
-//        return when (response.successful) {
-//            true -> {
-//                response.data?.toAuthModel().also {
-//                    sharedPreferences.edit()
-//                        .putString(KEY_JWT_TOKEN, it?.token)
-//                        .putString(KEY_USER_ID, it?.userId)
-//                        .apply()
-//                }
-//                Resource.Success<Unit>()
-//            }
-//            false -> {
-//                response.message?.let { serverMsg ->
-//                    Resource.Error(UiText.DynamicString(serverMsg))
-//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-//            }
-//        }
     }
 
     override suspend fun authenticate(): DefaultApiResource {
@@ -98,6 +81,5 @@ class AuthRepositoryImpl(
         return callApi {
             api.authenticate()
         }.mapApiResponse { it }
-        //return response.mapApiResponse { it }
     }
 }

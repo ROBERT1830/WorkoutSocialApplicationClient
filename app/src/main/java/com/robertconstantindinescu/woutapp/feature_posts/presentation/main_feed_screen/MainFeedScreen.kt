@@ -1,5 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,7 +44,7 @@ fun MainFeedScreen(
                 items(state.items.size) { index ->
                     //get post at scroll position
                     val post = state.items[index]
-                    if (index >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                    if ((index > state.items.size - 1 && state.items.isNotEmpty()) && !state.endReached && !state.isLoading) {
                         viewModel.loadNextPosts()
                     }
                     Post(
@@ -65,13 +66,17 @@ fun MainFeedScreen(
                             context.sharePost(postId)
                         }
                     )
-                    if (index == state.items.size - 1 && state.endReached) {
+                    Log.d("TAGcurrentIndex", (state.items.size - 1).toString())
+                    Log.d("TAGendReached", state.endReached.toString())
+                    Log.d("TAGsize", (state.items.size).toString())
+                    if (index == state.items.size - 1) {
+                        Log.d("paddingTop", "called")
                         Spacer(modifier = Modifier.height(dimens.spaceExtraLarge + dimens.spaceSmall))
                     }
                 }
             }
         }
-        if (state.items.isNullOrEmpty()) {
+        if (state.isShowNoPostText) {
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,

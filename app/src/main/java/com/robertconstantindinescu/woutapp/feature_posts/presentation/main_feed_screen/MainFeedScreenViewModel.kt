@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,7 +12,7 @@ import com.robertconstantindinescu.woutapp.feature_posts.domain.use_case.PostUse
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.mapper.toPostDM
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.state.PostState
 import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.mapper.toPostVO
-import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model.PostVO
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.model.PostVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -47,33 +46,23 @@ class MainFeedScreenViewModel @Inject constructor(
             mainFeedScreenState.page + 1
         },
         onSuccess = { newPosts, nextPage ->
-            //check with less amount thaqn 10 per load and see if the pagination works fine
-//            personalScreenState = when (reset) {
-//
-////                true -> {
-////                    //reload post from initial
-////                    personalScreenState.copy(
-////                        items = newPosts.map { it.toMainFeedPostVO() },
-////                        isLoading = false,
-////                        endReached = newPosts.isEmpty()
-////                    )
-////                }
-//
-//                //false -> {
-//                    personalScreenState.copy(
-//                        items = personalScreenState.items + newPosts.map { it.toMainFeedPostVO() },
-//                        isLoading = false,
-//                        endReached = newPosts.isEmpty()
-//                    )
-//                //}
-//            }
+
+            if ((mainFeedScreenState.items + newPosts).isEmpty()) {
+                mainFeedScreenState = mainFeedScreenState.copy(
+                    isLoading = false,
+                    isShowNoPostText = true,
+                    items = emptyList(),
+                    endReached = newPosts.isEmpty()
+                )
+                return@PaginatorImpl
+            }
             mainFeedScreenState = mainFeedScreenState.copy(
                 items = mainFeedScreenState.items + newPosts.map { it.toPostVO() },
                 isLoading = false,
                 endReached = newPosts.isEmpty(),
                 page = nextPage
             )
-            //}
+
 
         },
         onError = { text ->
@@ -86,7 +75,7 @@ class MainFeedScreenViewModel @Inject constructor(
     }
 
     fun onEvent(event: MainFeedEvent) {
-        when(event) {
+        when (event) {
             is MainFeedEvent.OnFavoriteClick -> {
                 savePostIntoFavorites(event.post)
             }
@@ -99,7 +88,19 @@ class MainFeedScreenViewModel @Inject constructor(
 
     private fun savePostIntoFavorites(post: PostVO) {
         viewModelScope.launch {
-            useCases.insertPostIntoFavoritesUseCase(post.toPostDM())
+
+            postSubscriptor.togglePostFavorites(
+                posts = mainFeedScreenState.items,
+                postId = post.postId,
+                onRequest = { isPostliked ->
+                    useCases.toggleFavoritesUseCase(post.toPostDM(), isPostliked)
+                },
+                onStateUpdate = { posts ->
+                    mainFeedScreenState = mainFeedScreenState.copy(
+                        items = posts
+                    )
+                }
+            )
         }
     }
 
@@ -111,11 +112,12 @@ class MainFeedScreenViewModel @Inject constructor(
 
     private fun toogleSubscription(postId: String) {
         viewModelScope.launch {
-            postSubscriptor.togglePostSubscriptor(
+            postSubscriptor.togglePostSubscripton(
                 posts = mainFeedScreenState.items,
                 postId = postId,
                 onRequest = { isUserSubscribed ->
                     useCases.toggleSubscribtionUseCase(postId, isUserSubscribed)
+                    // TODO: create the succes
                 },
                 onStateUpdate = { posts ->
                     mainFeedScreenState = mainFeedScreenState.copy(

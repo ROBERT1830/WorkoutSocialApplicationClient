@@ -33,7 +33,6 @@ fun PostDetailsScreen(
 ) {
     val dimens = LocalSpacing.current
     val state = viewModel.state
-    Log.d("state", state.post.toString())
 
     Column(
         modifier = Modifier

@@ -5,6 +5,7 @@ package com.robertconstantindinescu.woutapp.feature_posts.presentation.common.st
 data class PostState<T>(
     val items: List<T> = emptyList(),
     val isLoading: Boolean = false,
+    val isShowNoPostText: Boolean = false,
     val endReached: Boolean = false,
     val error: String? = null,
     val page: Int = 0

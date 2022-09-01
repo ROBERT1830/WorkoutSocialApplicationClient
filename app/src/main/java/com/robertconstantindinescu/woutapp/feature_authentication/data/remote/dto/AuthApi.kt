@@ -1,7 +1,6 @@
 package com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto
 
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.LoginRequestDto
-import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.request.SignUpRequestDto
 import com.robertconstantindinescu.woutapp.feature_authentication.data.remote.dto.response.AuthResponseDto
 import okhttp3.MultipartBody
 import retrofit2.Response

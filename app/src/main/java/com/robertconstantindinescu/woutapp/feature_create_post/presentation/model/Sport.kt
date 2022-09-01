@@ -1,12 +1,9 @@
 package com.robertconstantindinescu.woutapp.feature_create_post.presentation.model
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.*
-import com.robertconstantindinescu.woutapp.core.util.UiText
 
 data class Sport(
     val type: SportType,

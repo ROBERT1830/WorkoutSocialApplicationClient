@@ -1,7 +1,7 @@
 package com.robertconstantindinescu.woutapp.feature_posts.presentation.common.mapper
 
 import com.robertconstantindinescu.woutapp.feature_posts.domain.model.PostDM
-import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model.PostVO
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.model.PostVO
 
 fun PostDM.toPostVO(): PostVO =
     PostVO(

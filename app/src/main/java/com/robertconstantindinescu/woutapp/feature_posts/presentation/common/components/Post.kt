@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +27,7 @@ import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import com.robertconstantindinescu.woutapp.R
 import com.robertconstantindinescu.woutapp.core.presentation.ui.theme.LocalSpacing
-import com.robertconstantindinescu.woutapp.feature_posts.presentation.main_feed_screen.model.PostVO
+import com.robertconstantindinescu.woutapp.feature_posts.presentation.common.model.PostVO
 
 @ExperimentalMaterial3Api
 @Composable
@@ -42,9 +42,11 @@ fun Post(
     onShareClick: (postId: String) -> Unit = {},
     onSubscribeClick: () -> Unit = {},
     onDetailNavigate: (postId: String) -> Unit = {},
-    onDeletePost: (post: PostVO) -> Unit ={}
+    onDeletePost: (post: PostVO) -> Unit = {}
 ) {
     val dimens = LocalSpacing.current
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +102,7 @@ fun Post(
                             style = SpanStyle(
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
-                        ){
+                        ) {
                             append("${post.subscriptionsCount}")
                         }
                     },
@@ -188,7 +190,8 @@ fun Post(
                 color = MaterialTheme.colorScheme.background
             )
             Text(
-                modifier = Modifier.padding(start = dimens.spaceMedium,
+                modifier = Modifier.padding(
+                    start = dimens.spaceMedium,
                     end = dimens.spaceMedium,
                     bottom = dimens.spaceMedium,
                     top = dimens.spaceSmall
@@ -201,9 +204,7 @@ fun Post(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-
         }
-
 
     }
 

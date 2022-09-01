@@ -1,12 +1,12 @@
 package com.robertconstantindinescu.woutapp.feature_posts.data.repository
 
-import com.robertconstantindinescu.woutapp.R
+import android.util.Log
 import com.robertconstantindinescu.woutapp.core.util.DefaultApiResource
 import com.robertconstantindinescu.woutapp.core.util.Resource
-import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.core.util.callApi
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.local.entities.FavoritesPostDao
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
+import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.request.PostIdRequest
 import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.request.SubscribtionRequest
 import com.robertconstantindinescu.woutapp.feature_posts.data.mapper.toFavoritePostEntity
 import com.robertconstantindinescu.woutapp.feature_posts.data.mapper.toPostDM
@@ -27,21 +27,6 @@ class PostRepositoryImpl(
         }.mapApiResponse { posts ->
             posts.map { it.toPostDM() }
         }
-
-//        return when(response.successful) {
-//            true -> {
-//                if (response.data?.isNotEmpty() == true) {
-//                    Resource.Success(response.data.map { postDto ->
-//                        postDto.toPostDM()
-//                    })
-//                }else Resource.Success(emptyList<PostDM>())
-//            }
-//            false -> {
-//                response.message?.let {
-//                    Resource.Error(UiText.DynamicString(response.message))
-//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-//            }
-//        }
     }
 
     override suspend fun getAllCurrentUserPosts(
@@ -53,23 +38,17 @@ class PostRepositoryImpl(
         }.mapApiResponse { posts -> posts.map { it.toPostDM() } }
     }
 
+    override suspend fun deletePostFromRemote(postId: String): DefaultApiResource {
+        Log.d("postid", postId)
+        return callApi {
+            api.deletePost(PostIdRequest(postId))
+        }.mapApiResponse { it }
+    }
+
     override suspend fun getPostDetails(postId: String): Resource<PostDM> {
         return callApi {
             api.getPostDetails(postId)
         }.mapApiResponse { post -> post.toPostDM() }
-
-//        return when(response.successful) {
-//            true -> {
-//                response.data.let {
-//                    Resource.Success(it?.data?.toPostDM())
-//                }
-//            }
-//            false -> {
-//                response.message?.let {
-//                    Resource.Error(UiText.DynamicString(response.message))
-//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-//            }
-//        }
     }
 
     override fun getAllFavoritePosts(page: Int, offset: Int): Flow<List<PostDM>> {
@@ -78,45 +57,30 @@ class PostRepositoryImpl(
         }
     }
 
-    override suspend fun insertPostIntoFavorites(postDM: PostDM) {
+    override suspend fun insertPostIntoFavorites(postDM: PostDM): DefaultApiResource {
         local.insertPostIntoFavorites(postDM.toFavoritePostEntity())
+        return callApi {
+            api.insertPostToFavorites(PostIdRequest(postId = postDM.postId))
+        }.mapApiResponse { it }
+
     }
 
-    override suspend fun deletePostFromFavorites(postDM: PostDM) {
+    override suspend fun deletePostFromFavorites(postDM: PostDM): DefaultApiResource {
         local.deletePostFromFavorites(postDM.toFavoritePostEntity())
+        return callApi {
+            api.deletePostToFavorites(PostIdRequest(postId = postDM.postId))
+        }.mapApiResponse { it }
     }
 
     override suspend fun subscribeUser(postId: String): DefaultApiResource {
         return callApi {
             api.subscribeUser(SubscribtionRequest(postId = postId))
         }.mapApiResponse { it }
-
-//        return when(response.successful) {
-//            true -> {
-//                Resource.Success<Unit>()
-//            }
-//            false -> {
-//                response.message?.let { serverMsg ->
-//                    Resource.Error(UiText.DynamicString(serverMsg))
-//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-//            }
-//        }
     }
 
     override suspend fun unsubscribeUser(postId: String): DefaultApiResource {
         return callApi {
             api.unsubscribeUser(SubscribtionRequest(postId = postId))
         }.mapApiResponse { it }
-
-//        return when(response.successful) {
-//            true -> {
-//                Resource.Success<Unit>()
-//            }
-//            false -> {
-//                response.message?.let { serverMsg ->
-//                    Resource.Error(UiText.DynamicString(serverMsg))
-//                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
-//            }
-//        }
     }
 }

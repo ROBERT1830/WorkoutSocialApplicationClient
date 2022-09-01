@@ -73,4 +73,7 @@
     <string name="update_credential_screen_title">Update your basic credentials!</string>
     <string name="update_credential_screen_update_button">Update</string>
     <string name="no_data_available">No posts yet...</string>
+    <string name="dialog_title">Delete Post</string>
+    <string name="dialog_description">Do you want to proceed?</string>
+    <string name="main_feed_screen_post_favorite">Now this post is added to favorites!</string>
 </resources>

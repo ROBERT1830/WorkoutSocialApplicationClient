@@ -108,23 +108,6 @@ class PostViewModel @Inject constructor(
                 _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.must_select_sport)))
                 return@launch
             }
-
-
-//            when(result) {
-//                is Resource.Success -> {
-//                    postImageState = null
-//                    formsState = FormsState()
-//                    sportTypeState = SportTypeState()
-//                    isLoading = false
-//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.post_created)))
-//                    _uiEvent.send(UiEvent.NavigateUp(null))
-//
-//                }
-//                is Resource.Error -> {
-//                    isLoading = false
-//                    _uiEvent.send(UiEvent.ShowSnackBar(result.text ?: UiText.unknownError()))
-//                }
-//            }
         }
     }
 

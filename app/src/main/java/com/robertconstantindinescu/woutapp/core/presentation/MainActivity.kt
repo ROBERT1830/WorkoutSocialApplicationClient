@@ -115,10 +115,6 @@ class MainActivity : ComponentActivity() {
                             startDestination = AuthScreen.SplashAuthScreen.route
                         ) {
                             composable(AuthScreen.SplashAuthScreen.route) {
-//                                SplashScreen {
-//                                    navController.popBackStack()
-//                                    navController.navigate(AuthScreen.LoginAuthScreen.route)
-//                                }
                                 SplashScreen(
                                     onNavigateTo = { route ->
                                         navController.popBackStack()
@@ -222,7 +218,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(route = BottomMenuScreen.PersonalPostScreen.route) {
-                                PersonalScreen(imageLoader = imageLoader)
+                                PersonalScreen(imageLoader = imageLoader, scaffoldState = scaffoldState)
                             }
 
                             composable(route = BottomMenuScreen.UpdateProfileScreen.route) {

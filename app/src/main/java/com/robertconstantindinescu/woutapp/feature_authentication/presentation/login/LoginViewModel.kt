@@ -7,13 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robertconstantindinescu.woutapp.R
-import com.robertconstantindinescu.woutapp.core.util.Resource
 import com.robertconstantindinescu.woutapp.core.util.UiEvent
 import com.robertconstantindinescu.woutapp.core.util.UiText
 import com.robertconstantindinescu.woutapp.feature_authentication.domain.use_case.AuthUseCases
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.AuthConstants.EMAIL
-import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.PasswordState
 import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.DefaultFieldState
+import com.robertconstantindinescu.woutapp.feature_authentication.presentation.util.PasswordState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -116,31 +115,6 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             )
-
-//            when(loginResult.result) {
-//                is Resource.Success -> {
-//                    loginState = loginState.copy(
-//                        isLoading = false
-//                    )
-//                    //reset fields
-//                    emailState = DefaultFieldState()
-//                    passwordState = PasswordState(defaultFieldState = DefaultFieldState())
-//
-//                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.login_screen_successful_login)))
-//                    _uiEvent.send(UiEvent.NavigateTo())
-//                }
-//                is Resource.Error -> {
-//                    loginState = loginState.copy(
-//                        isLoading = false
-//                    )
-//                    _uiEvent.send(
-//                        UiEvent.ShowSnackBar(loginResult.result.text ?: UiText.unknownError())
-//                    )
-//                }
-//                else -> Unit
-//            }
-
-
         }
     }
 }

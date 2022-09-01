@@ -38,7 +38,7 @@ fun ActionRow(
     onFavoritesClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
     onSubscribeClick: () -> Unit = {},
-    onDeletePost: () -> Unit = {}
+    onDeletePost:  () -> Unit = {}
 ) {
     val dimens = LocalSpacing.current
     Row(

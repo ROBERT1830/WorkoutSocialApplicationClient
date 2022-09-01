@@ -1,6 +1,5 @@
 package com.robertconstantindinescu.woutapp.feature_update_credentials.di
 
-import com.robertconstantindinescu.woutapp.feature_posts.data.dto.remote.PostApi
 import com.robertconstantindinescu.woutapp.feature_update_credentials.data.remote.UpdateCredentialApi
 import com.robertconstantindinescu.woutapp.feature_update_credentials.data.remote.UpdateCredentialApi.Companion.UPDATE_CREDENTIALS_BASE_URL
 import com.robertconstantindinescu.woutapp.feature_update_credentials.domain.repository.UpdateProfileRepository
@@ -14,7 +13,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module

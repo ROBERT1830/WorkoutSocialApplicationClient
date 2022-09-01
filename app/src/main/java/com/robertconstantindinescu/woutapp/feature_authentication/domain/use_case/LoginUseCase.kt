@@ -6,7 +6,6 @@ import com.robertconstantindinescu.woutapp.feature_authentication.domain.util.Au
 
 class LoginUseCase(private val repository: AuthRepository) {
 
-    // TODO: mirar bien bnien el tema del; resource.  
     suspend operator fun invoke(email: String, passsword: String): UserDataValidation {
 
         if (email.isBlank()) return UserDataValidation(emailError = AuthError.FieldEmpty)

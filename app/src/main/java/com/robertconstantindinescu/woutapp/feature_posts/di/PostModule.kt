@@ -14,7 +14,6 @@ import com.robertconstantindinescu.woutapp.feature_posts.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -59,11 +58,12 @@ object PostModule {
         return PostUseCases(
             mainFeedGetAllPostsUseCase = MainFeedGetAllPostsUseCase(repository),
             personalGetAllPostsUseCase = PersonalGetAllPostsUseCase(repository),
-            insertPostIntoFavoritesUseCase = InsertPostIntoFavoritesUseCase(repository),
+            toggleFavoritesUseCase = InsertPostIntoFavoritesUseCase(repository),
             deleteFromFavoritesUseCase = DeleteFromFavoritesUseCase(repository),
             getAllFavoritesPostsUseCase = GetAllFavoritesPostsUseCase(repository),
             toggleSubscribtionUseCase = ToggleSubscribtionUseCase(repository),
-            getPostDetailsUseCase = GetPostDetailsUseCase(repository)
+            getPostDetailsUseCase = GetPostDetailsUseCase(repository),
+            deletePostFromRemoteUseCase = DeletePostFromRemoteUseCase(repository)
         )
     }
 

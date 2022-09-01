@@ -1,5 +1,3 @@
-
-
 package com.robertconstantindinescu.woutapp.core.presentation.components
 
 import androidx.compose.foundation.layout.Column
@@ -118,9 +116,7 @@ fun StandardTexField(
                         }
                     }
                 } else null,
-
                 )
-
         }
         if (error.isNotEmpty()) {
             Text(
